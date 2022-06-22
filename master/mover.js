@@ -3,6 +3,7 @@ const shell = require('child_process').execSync;
 const merge = require('lodash/merge')
 const { moduleName } = require("./index")
 const assetsFonts = "assets/fonts"
+
 /* copy directory */
 if (fs.existsSync('../esoftplay/esp.ts')) {
 	if (fs.existsSync('../esoftplay/modules/' + moduleName))
@@ -72,7 +73,7 @@ if (fs.existsSync("./libs.json")) {
 	}
 	if (libs.length > 0) {
 		console.log("mohon tunggu ..")
-		console.log("installing \n" + libs.join("\n"))
+		console.log("installing \\n" + libs.join("\\n"))
 		shell("cd ../../ && expo install " + libs.join(" && expo install "))
 	}
 	console.log("Success..!")

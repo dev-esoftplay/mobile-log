@@ -39,6 +39,13 @@ if (fs.existsSync("../mobile/config.json")) {
 		const confMaster = { [moduleName]: confMobile.config[moduleName] }
 		fs.writeFileSync("./config.json", JSON.stringify(confMaster, undefined, 2))
 	}
+	/* copy config font */
+	if (confMobile.config.hasOwnProperty("fonts")) {
+		const config = require("./config.json")
+		const confMaster = { ['fonts']: confMobile.config['fonts'] }
+		fs.writeFileSync("./config.json", JSON.stringify(Object.assign(config, confMaster), undefined, 2))
+	}
+
 }
 
 if (fs.existsSync("./package.json")) {
@@ -66,5 +73,5 @@ if (fs.existsSync("./package.json")) {
 	const newPackJson = { ...packJson, version: nextVersion }
 	fs.writeFileSync("./package.json", JSON.stringify(newPackJson, undefined, 2))
 	shell("npm publish")
-	console.log(" npm install --save esoftplay-" + moduleName + "@" + nextVersion + " ")
+	console.log("\nnpm install --save esoftplay-" + moduleName + "@" + nextVersion + "\n")
 }
