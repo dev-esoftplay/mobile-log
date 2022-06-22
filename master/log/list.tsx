@@ -1,9 +1,9 @@
 // withHooks
 
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import { LibCurl, LibDialog, LibIcon, LibList, LibNavigation, LibProgress, LibSlidingup, LibStyle, LibUtils, LogItem, LogStateProperty, LogTokenProperty, UserClass } from 'esoftplay';
+import { LibCurl, LibDialog, LibIcon, LibList, LibNavigation, LibProgress, LibStyle, LibUtils, LogItem, LogStateProperty, LogTokenProperty, UserClass } from 'esoftplay';
 import esp from 'esoftplay/esp';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 
@@ -14,7 +14,6 @@ export interface LogListProps {
   onClose: () => void
 }
 export default function m(props: LogListProps): any {
-  const refFeature = useRef<LibSlidingup>(null);
   const [urlList, setUrlList] = LogStateProperty.state().useState()
   const user = UserClass.state().useSelector((s) => s)
   const urlData = urlList?.reduce?.((r: any, a: any) => {
@@ -83,7 +82,7 @@ export default function m(props: LogListProps): any {
           <Text style={{ marginLeft: 10 }}>{'API DEBUGGER : '}</Text>
         </Pressable>
         <Pressable style={{ marginRight: 10 }} onPress={() => setEnableLog(!enableLog)} >
-          <Text style={{ fontWeight: "bold", color: enableLog ? LibStyle.colorGreen : LibStyle.colorRed }} >{enableLog ? "ON" : "OFF"}</Text>
+          <Text style={{ fontWeight: "bold", color: enableLog ? '#2CB159' : '#E63A3A' }} >{enableLog ? "ON" : "OFF"}</Text>
         </Pressable>
         <View style={{ flex: 1 }} />
         {
@@ -116,9 +115,6 @@ export default function m(props: LogListProps): any {
           <LogItem item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
         )}
       />
-      <LibSlidingup ref={refFeature} >
-
-      </LibSlidingup>
     </View>
   )
 }
