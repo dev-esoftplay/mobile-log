@@ -87,13 +87,14 @@ export function curl(uri: string, post: any, log: (uri: string, result: any) => 
     method: !post ? "GET" : "POST",
     headers: {
       ...headers,
-      token: new LibCrypt().encode(getTimeByTimeZone("Asia/Jakarta") + token)
+      token: new LibCrypt().encode(token)
     },
     // data: !post ? undefined : post,
     cache: "no-store",
     Pragma: "no-cache",
     ["Cache-Control"]: 'no-cache, no-store, must-revalidate',
     ["Expires"]: 0,
+    mode: "cors",
     body: post,
     _post: post,
   }).then((res) => res.text()).then((resText) => {

@@ -1,9 +1,9 @@
 // withHooks
 
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import { LibCurl, LibDialog, LibIcon, LibList, LibNavigation, LibProgress, LibStyle, LibUtils, LogItem, LogStateProperty, LogTokenProperty, UserClass } from 'esoftplay';
+import { LibCurl, LibDialog, LibIcon, LibList, LibNavigation, LibProgress, LibStyle, LogItem, LogStateProperty, LogTokenProperty, UserClass } from 'esoftplay';
 import esp from 'esoftplay/esp';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
 
@@ -23,16 +23,16 @@ export default function m(props: LogListProps): any {
   const [enableLog, setEnableLog] = LogStateProperty.enableLog().useState()
   const token = LogTokenProperty.state().useSelector(s => s)
 
-  useEffect(() => {
-    LogTokenProperty.buildToken([
-      user?.id || 0,
-      user?.member_id || 0,
-      user?.merchant_id || 0,
-      LibUtils?.getInstallationID(),
-      user?.mitra_id || 0,
-      user?.dc_id || 0,
-    ])
-  }, [])
+  // useEffect(() => {
+  //   LogTokenProperty.buildToken([
+  //     user?.id || 0,
+  //     user?.member_id || 0,
+  //     user?.merchant_id || 0,
+  //     LibUtils?.getInstallationID(),
+  //     user?.mitra_id || 0,
+  //     user?.dc_id || 0,
+  //   ])
+  // }, [])
 
 
   function sendToken() {
