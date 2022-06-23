@@ -30,6 +30,20 @@ export default function m(props: LogAttack_listProps): any {
 
   const filteredData = resLength != "0" ? data.filter((t: any) => t.result_length == resLength) : data
 
+  function renderItem(item: any, i: number) {
+    return (
+      <LogAttack_item key={i} {...item} index={item} color={newFiltered?.[item?.result_length]} />
+    )
+  }
+
+  function renderUnique(x: any, i: number) {
+    return (
+      <Pressable key={i} onPress={() => { setResLength(x); slidingRes?.current?.hide() }} style={{ marginBottom: 10, marginRight: 10, borderRadius: 5, padding: 5, paddingHorizontal: 10, backgroundColor: resLength == x ? LibStyle.colorPrimary : '#e6e6e6' }}>
+        <Text>{x}</Text>
+      </Pressable>
+    )
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <LibStatusbar style='dark' />
@@ -64,9 +78,8 @@ export default function m(props: LogAttack_listProps): any {
       </View>
       <LibList
         data={filteredData}
-        renderItem={(item: any, i: number) => (
-          <LogAttack_item key={i} {...item} index={item} color={newFiltered?.[item?.result_length]} />
-        )}
+        keyExtractor={(x: any, i: number) => i.toString()}
+        renderItem={renderItem}
       />
       <LibSlidingup ref={slidingRes}>
         <View style={{ backgroundColor: 'white', borderTopLeftRadius: 10, borderTopRightRadius: 10, padding: 10, paddingHorizontal: 15, paddingBottom: 20 }}>
@@ -76,11 +89,7 @@ export default function m(props: LogAttack_listProps): any {
           <ScrollView style={{ maxHeight: LibStyle.height * 0.7, minHeight: 100 }}>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', marginTop: 10 }}>
               {
-                unique.map((x: any, i: number) => (
-                  <Pressable key={i} onPress={() => { setResLength(x); slidingRes?.current?.hide() }} style={{ marginBottom: 10, marginRight: 10, borderRadius: 5, padding: 5, paddingHorizontal: 10, backgroundColor: resLength == x ? LibStyle.colorPrimary : '#e6e6e6' }}>
-                    <Text>{x}</Text>
-                  </Pressable>
-                ))
+                unique?.map?.(renderUnique)
               }
             </View>
           </ScrollView>

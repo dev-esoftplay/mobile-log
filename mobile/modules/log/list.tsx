@@ -74,6 +74,12 @@ export default function m(props: LogListProps): any {
     }, 'Batal', () => { })
   }
 
+  function renderItems(item: any, i: number) {
+    return (
+      <LogItem item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
+    )
+  }
+
   return (
     <View style={{ backgroundColor: "white", height: '100%' }}>
       <View style={{ flexDirection: 'row', padding: 10, paddingTop: LibStyle.STATUSBAR_HEIGHT, alignItems: 'center', backgroundColor: 'white', marginBottom: 2, ...LibStyle.elevation(2) }}>
@@ -111,9 +117,8 @@ export default function m(props: LogListProps): any {
       <LibList
         style={{ flex: 1 }}
         data={Object.keys(urlData)}
-        renderItem={(item: any, i: number) => (
-          <LogItem item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
-        )}
+        keyExtractor={(t: any, i: number) => i.toString()}
+        renderItem={renderItems}
       />
     </View>
   )

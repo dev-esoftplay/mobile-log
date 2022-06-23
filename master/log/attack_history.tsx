@@ -21,6 +21,25 @@ export function state(): useGlobalReturn<any> {
 export default function m(props: LogAttack_listProps): any {
   const [state, setState] = _state.useState()
 
+  function renderItems(item: any, i: number) {
+    return (
+      <View key={i} style={{ paddingVertical: 15, marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
+        <Pressable
+          onPress={() => { LibNavigation.navigate('log/attack_list', { data: Object.values(state[item]) }) }}
+          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={{ flex: 1, fontSize: 16, fontFamily: 'MonoSpace' }}>{item}</Text>
+          <Pressable onPress={() => {
+            LibDialog.warningConfirm('Hapus?', "Hapus Log " + item + " ?", 'Hapus', () => {
+              setState(LibObject.unset(state, item)())
+            }, 'Batal', () => { })
+          }} style={{ marginLeft: 5 }} >
+            <LibIcon.AntDesign name="delete" />
+          </Pressable>
+        </Pressable>
+      </View>
+    )
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <LibStatusbar style='dark' />
@@ -34,22 +53,7 @@ export default function m(props: LogAttack_listProps): any {
       </View>
       <LibList
         data={Object.keys(state)}
-        renderItem={(item: any, i: number) => (
-          <View key={i} style={{ paddingVertical: 15, marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
-            <Pressable
-              onPress={() => { LibNavigation.navigate('log/attack_list', { data: Object.values(state[item]) }) }}
-              style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ flex: 1, fontSize: 16, fontFamily: 'MonoSpace' }}>{item}</Text>
-              <Pressable onPress={() => {
-                LibDialog.warningConfirm('Hapus?', "Hapus Log " + item + " ?", 'Hapus', () => {
-                  setState(LibObject.unset(state, item)())
-                }, 'Batal', () => { })
-              }} style={{ marginLeft: 5 }} >
-                <LibIcon.AntDesign name="delete" />
-              </Pressable>
-            </Pressable>
-          </View>
-        )}
+        renderItem={renderItems}
       />
 
     </View>
