@@ -1,4 +1,7 @@
 {
+  "log": {
+    "enable": 0
+  },
   "fonts": {
     "MonoSpace": "RobotoMono-Light.ttf"
   }
