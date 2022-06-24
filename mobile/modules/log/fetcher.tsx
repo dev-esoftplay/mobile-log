@@ -1,7 +1,6 @@
 // withHooks
 
 import { esp, LibCrypt, LogTokenProperty } from "esoftplay";
-import moment from "esoftplay/moment";
 
 
 
@@ -105,9 +104,17 @@ export function curl(uri: string, post: any, log: (uri: string, result: any) => 
 }
 
 export function getTimeByTimeZone(timeZone: string): number {
-  return moment(new Date()).tz(timeZone).toMiliseconds();
+  let localTimezoneOffset = new Date().getTimezoneOffset()
+  let serverTimezoneOffset = -420 // -420 for Asia/Jakarta
+  let diff
+  if (localTimezoneOffset < serverTimezoneOffset) {
+    diff = localTimezoneOffset - serverTimezoneOffset
+  } else {
+    diff = (serverTimezoneOffset - localTimezoneOffset) * -1
+  }
+  let time = new Date().getTime() + (diff * 60 * 1000 * -1);
+  return time;
 }
-
 
 export default function m(props: LogFetcherProps): any {
   return null
