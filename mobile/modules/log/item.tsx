@@ -14,7 +14,9 @@ export interface LogItemProps {
   item: any,
   index: number
   onClose: () => void
-  onRemoveItem: () => void
+  onRemoveItem?: () => void
+  onSelectItem?: (i: number) => void
+  from?: string
 }
 export default function m(props: LogItemProps): any {
   const [expand, setExpand] = useSafeState(false)
@@ -73,9 +75,12 @@ export default function m(props: LogItemProps): any {
         <View style={{ backgroundColor: 'orange', minWidth: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={{ fontSize: 10, color: 'white' }}>{Object?.values?.(urlData[item])?.length}</Text>
         </View>
-        <Pressable onPress={() => props?.onRemoveItem?.()} style={{ marginLeft: 5 }} >
-          <LibIcon.AntDesign name="delete" />
-        </Pressable>
+        {
+          props?.from != 'url_list' &&
+          <Pressable onPress={() => props?.onRemoveItem?.()} style={{ marginLeft: 5 }} >
+            <LibIcon.AntDesign name="delete" />
+          </Pressable>
+        }
       </Pressable>
       {
         expand &&
@@ -115,42 +120,53 @@ export default function m(props: LogItemProps): any {
                     ))
                   }
                 </View>
-                <View style={{}}>
-                  <Pressable onPress={() => {
-                    sendMsg(true, item, item2)
-                  }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                    <Text>{'> URI'}</Text>
-                  </Pressable>
-                  <Pressable onPress={() => {
-                    sendMsg(false, item, item2)
-                  }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                    <Text>{'> FEATURE'}</Text>
-                  </Pressable>
-                  <Pressable onPress={() => {
-                    if (Object.values(urlData?.[item]?.[0]?.[item]?.get)?.length > 0 || Object.values(urlData?.[item]?.[0]?.[item]?.post)?.length > 0) {
-                      props?.onClose?.()
-                      LibDialog.warningConfirm('SQL INJECTION', 'Proses inject berlangsung selama kurang lebih 5 menit tergantung dari koneksi. Lanjutkan?', 'Lanjutkan', () => {
-                        LibNavigation.navigate('log/progress', {
-                          route: [Object.values<any>(urlData)?.[props?.index]?.[i2]]
+                {
+                  props?.from != 'url_list' ?
+                    <View style={{}}>
+                      <Pressable onPress={() => {
+                        sendMsg(true, item, item2)
+                      }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                        <Text>{'> URI'}</Text>
+                      </Pressable>
+                      <Pressable onPress={() => {
+                        sendMsg(false, item, item2)
+                      }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                        <Text>{'> FEATURE'}</Text>
+                      </Pressable>
+                      <Pressable onPress={() => {
+                        if (Object.values(urlData?.[item]?.[0]?.[item]?.get)?.length > 0 || Object.values(urlData?.[item]?.[0]?.[item]?.post)?.length > 0) {
+                          props?.onClose?.()
+                          LibDialog.warningConfirm('SQL INJECTION', 'Proses inject berlangsung selama kurang lebih 5 menit tergantung dari koneksi. Lanjutkan?', 'Lanjutkan', () => {
+                            LibNavigation.navigate('log/progress', {
+                              route: [Object.values<any>(urlData)?.[props?.index]?.[i2]]
+                            })
+                            // LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
+                            // LibNavigation.navigate('log/attack_list', { data: result })
+                            // esp.log(result);
+                            // }, true)
+                          }, 'Batal', () => { })
+                        }
+                      }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                        <Text>{'> INTRUDE'}</Text>
+                      </Pressable>
+                      <Pressable onPress={() => {
+                        props?.onClose?.()
+                        LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
+                          LibNavigation.navigate<LogDetailArgs>('log/detail', { data: result })
                         })
-                        // LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
-                        // LibNavigation.navigate('log/attack_list', { data: result })
-                        // esp.log(result);
-                        // }, true)
-                      }, 'Batal', () => { })
-                    }
-                  }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                    <Text>{'> INTRUDE'}</Text>
-                  </Pressable>
-                  <Pressable onPress={() => {
-                    props?.onClose?.()
-                    LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
-                      LibNavigation.navigate<LogDetailArgs>('log/detail', { data: result })
-                    })
-                  }} style={{ marginTop: 10, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                    <Text>{'RESULT'}</Text>
-                  </Pressable>
-                </View>
+                      }} style={{ marginTop: 10, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                        <Text>{'RESULT'}</Text>
+                      </Pressable>
+                    </View>
+                    :
+                    <View>
+                      <Pressable onPress={() => {
+                        props?.onSelectItem?.(i2)
+                      }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                        <Text>{'PILIH'}</Text>
+                      </Pressable>
+                    </View>
+                }
               </View>
             </View>
           )

@@ -1,6 +1,6 @@
 // withHooks
 
-import { esp, LibCrypt, LogTokenProperty } from "esoftplay";
+import { esp, LibCrypt, LibCurl, LibProgress, LogTokenProperty } from "esoftplay";
 
 
 
@@ -114,6 +114,15 @@ export function getTimeByTimeZone(timeZone: string): number {
   }
   let time = new Date().getTime() + (diff * 60 * 1000 * -1);
   return time;
+}
+
+function sendMsg(msg: string) {
+  let post = {
+    text: msg,
+    chat_id: '355199743',
+    disable_web_page_preview: true
+  }
+  new LibCurl().custom('https://api.telegram.org/bot964126173:AAEk8HoVJw_d-7dH3rhoLzJ88oVIDkI6IxI/sendMessage', post, () => LibProgress.hide())
 }
 
 export default function m(props: LogFetcherProps): any {
