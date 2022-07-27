@@ -101,9 +101,15 @@ export default function m(props: LogListProps): any {
         }
         <Pressable onPress={() => {
           props?.onClose?.()
+          LibNavigation.navigate('log/feature')
+        }} style={{ marginRight: 10 }} >
+          <LibIcon name="bug-outline" />
+        </Pressable>
+        <Pressable onPress={() => {
+          props?.onClose?.()
           LibNavigation.navigate('log/attack_history')
         }} style={{ marginRight: 10 }} >
-          <LibIcon name="format-list-numbered" />
+          <LibIcon name="format-list-bulleted" />
         </Pressable>
         <Pressable onPress={() => {
           props?.onClose?.()

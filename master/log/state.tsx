@@ -23,35 +23,54 @@ export function enableLog(): useGlobalReturn<any> {
   return stateIsDebug
 }
 
+function doRepairUrl(url: string) {
+  let repaired = url.split('/')
+  if (repaired.length > 1) {
+    const lastIdx = repaired.length - 1
+    const uriParam = repaired[lastIdx].split("?")[0]
+    const fixGET = repaired[lastIdx].split('?').join('&')
+
+    if (!isNaN(Number(uriParam))) {
+      console.log('masuk 1');
+      url = repaired.slice(0, lastIdx).join('/')
+      url += "?id=" + [fixGET];
+    }
+  }
+  return url
+}
+
+function fixUrl(url: string) {
+  let fullUrl = url
+  const nurl = url.replace(/(https?:\/\/)/g, '')
+  const spath = nurl.split('/').slice(1, nurl.length - 1).join('/')
+  let host = nurl.split('/')[0] + '/'
+  let path = doRepairUrl(spath)
+  fullUrl = host + path
+
+  return fullUrl
+}
+
 export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean) {
   if (!!esp.config('log')?.enable) {
     const allData = state().get() || []
     const logEnable = enableLog().get()
-    let uriOrigin = uri
-    if (uri == '' && url != '') {
-      uriOrigin = url.replace(/(https?:\/\/)/g, '')
+
+    const fullURL = url + uri
+    let uriOrigin = ''
+
+    if (fullURL != '') {
+      const urls = fixUrl(fullURL)
+      uriOrigin = urls.replace(/(https?:\/\/)/g, '')
       let uriArray = uriOrigin.split('/')
       let domain = uriArray[0]
+
       if (!domain.startsWith('api.')) {
         uriOrigin = ''
       } else {
         let uri = uriArray.slice(1, uriArray.length - 1).join('/')
         let get = uriArray[uriArray.length - 1];
-        let newGet = '';
-        if (get && get.includes('?')) {
-          let rebuildGet = get.split('?')
-          for (let i = 0; i < rebuildGet.length; i++) {
-            const element = rebuildGet[i];
-            if (!element.includes('=')) {
-              newGet += '?id=' + element
-            } else {
-              newGet += (newGet.includes('?') ? '&' : '?') + element
-            }
-          }
-        } else {
-          newGet = get;
-        }
-        uriOrigin = uri + newGet
+        let newURI = uri != "" ? uri + '/' : uri
+        uriOrigin = newURI + get
       }
     }
     const complete_uri = uriOrigin

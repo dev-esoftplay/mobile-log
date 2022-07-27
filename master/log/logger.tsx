@@ -44,10 +44,8 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
   let inject = LogSql_inject()
 
   function addResume(param: any) {
-    console.log(param);
     resume += param + '\n'
   }
-
   let scene = -1
   next(allroutes, 0, 0)
 
@@ -121,81 +119,78 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
           logResults(allroutes)
         }
       })
-    } else {
-      if (intrude) {
-        let newResult: any = []
-        intrude(fixUris(currentRouteKey), GET, POST, inject, 0)
+    } else if (intrude) {
+      let newResult: any = []
+      intrude(fixUris(currentRouteKey), GET, POST, inject, 0)
 
-        function result(res: any) {
-          let restructure = res.map((item: any, i: number) =>
-          (
-            {
-              id: i + 1,
-              message: item.message,
-              uri: item.uri,
-              url: item.url,
-              ok: item.ok,
-              status_code: item.status_code,
-              result: item.result,
-              result_length: item.result_length,
-              get: Object.assign({}, ...item?.get_key?.map?.((t: any) => ({ [t]: item?.get }))) || {},
-              post: Object.assign({}, ...item?.post_key?.map?.((t: any) => ({ [t]: item?.post }))) || {},
-            }
-          )
-          )
-          logResults(restructure)
-        }
+      function result(res: any) {
+        let restructure = res.map((item: any, i: number) =>
+        (
+          {
+            id: i + 1,
+            message: item.message,
+            uri: item.uri,
+            url: item.url,
+            ok: item.ok,
+            status_code: item.status_code,
+            result: item.result,
+            result_length: item.result_length,
+            get: Object.assign({}, ...item?.get_key?.map?.((t: any) => ({ [t]: item?.get }))) || {},
+            post: Object.assign({}, ...item?.post_key?.map?.((t: any) => ({ [t]: item?.post }))) || {},
+          }
+        )
+        )
+        logResults(restructure)
+      }
 
-        function intrude(url: string, get: any, post: any, value: any, index: number) {
-          const currentValue = value[index]
-          const maxLength = value.length - 1
-          // const maxLength = 10
-          let GET = get
-          let POST = post
+      function intrude(url: string, get: any, post: any, value: any, index: number) {
+        const currentValue = value[index]
+        const maxLength = value.length - 1
+        // const maxLength = 10
+        let GET = get
+        let POST = post
 
-          Object.keys(GET).map((key) => {
-            GET[key] = currentValue
-          })
-          Object.keys(POST).map((key) => {
-            POST[key] = currentValue
-          })
-          LogFetcherProperty.curl(url + objectToUrlParam(GET), post, (uri: string, res: any) => {
-            if (index < maxLength && !forceStop) {
-              newResult.push({
-                uri,
-                url,
-                get: currentValue,
-                get_key: Object.keys(GET),
-                post: currentValue,
-                post_key: Object.keys(POST),
-                result_length: JSON.stringify(res).length,
-                ...res
-              })
-              esp.log(esp.logColor.green, uri);
-              LogProgressProperty.curValue().set({ current_value: currentValue, result_length: JSON.stringify(res).length })
-              LogProgressProperty.state().set(newResult.length)
-              intrude(url, GET, POST, value, index + 1)
-            } else {
-              result(newResult)
-            }
-          })
-        }
-
-      } else {
-        curl(fixUris(currentRouteKey) + objectToUrlParam(GET), POST).then((r) => {
-          allroutes[index][currentRouteKey]['USER_ID'] = artoken[1]
-          allroutes[index][currentRouteKey]['RESPONSE'] = r
-          addResume('\t\t\t' + currentRouteKey + ' :  ' + r)
-
-          if (_idx < routeKeysSize - 1) {
-            next(allroutes, index, _idx + 1)
-          } else if (index < allroutes.length - 1) {
-            next(allroutes, index + 1, 0)
+        Object.keys(GET).map((key) => {
+          GET[key] = currentValue
+        })
+        Object.keys(POST).map((key) => {
+          POST[key] = currentValue
+        })
+        LogFetcherProperty.curl(url + objectToUrlParam(GET), post, (uri: string, res: any) => {
+          if (index < maxLength && !forceStop) {
+            newResult.push({
+              uri,
+              url,
+              get: currentValue,
+              get_key: Object.keys(GET),
+              post: currentValue,
+              post_key: Object.keys(POST),
+              result_length: JSON.stringify(res).length,
+              ...res
+            })
+            esp.log(esp.logColor.green, uri);
+            LogProgressProperty.curValue().set({ current_value: currentValue, result_length: JSON.stringify(res).length })
+            LogProgressProperty.state().set(newResult.length)
+            intrude(url, GET, POST, value, index + 1)
           } else {
-            logResults(allroutes)
+            result(newResult)
           }
         })
       }
+    } else {
+      curl(fixUris(currentRouteKey) + objectToUrlParam(GET), POST).then((r) => {
+        allroutes[index][currentRouteKey]['USER_ID'] = artoken[1]
+        allroutes[index][currentRouteKey]['RESPONSE'] = r
+        addResume('\t\t\t' + currentRouteKey + ' :  ' + r)
+
+        if (_idx < routeKeysSize - 1) {
+          next(allroutes, index, _idx + 1)
+        } else if (index < allroutes.length - 1) {
+          next(allroutes, index + 1, 0)
+        } else {
+          logResults(allroutes)
+        }
+      })
     }
   }
 
@@ -210,6 +205,12 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
       let GET = Object.values<any>(api)[0].get
       let POST = Object.values<any>(api)[0].post
       let IS_SECURE_POST = Object.values<any>(api)[0].secure
+
+      let keyGET = Object.keys(GET).map((t: any) => ({ [t]: Array.isArray(GET[t]) ? GET[t] : [GET[t]] }))
+      let keyPOST = Object.keys(POST).map((t: any) => ({ [t]: Array.isArray(POST[t]) ? POST[t] : [POST[t]] }))
+
+      GET = Object.assign({}, ...keyGET)
+      POST = Object.assign({}, ...keyPOST)
 
       let objGET: any = []
       let objPOST: any = []
