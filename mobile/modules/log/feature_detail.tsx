@@ -32,18 +32,19 @@ export default function m(props: LogFeature_detailProps): any {
       'domain: ' + config?.url.replace(/^https?:\/\//, ''),
     ]
 
-    const features = data[title].map((t: any) => [keyT(t), { GET: newParams(Object.values<any>(t)?.[0]?.get), POST: newParams(Object.values<any>(t)?.[0]?.post) }])
+    const features = data[title].map((t: any) => [keyT(t), { GET: JSON.stringify(Object.values<any>(t)?.[0]?.get) != '{}' ? newParams(Object.values<any>(t)?.[0]?.get) : undefined, POST: JSON.stringify(Object.values<any>(t)?.[0]?.post) != "{}" ? newParams(Object.values<any>(t)?.[0]?.post) : undefined }])
     const uri = data[title].map((t: any) => (
-      `node import.js 'uri:::` + keyT(t) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(t)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = ` + JSON.stringify(Object.values<any>(t)?.[0]?.get, undefined, 2) + `|||const POST = ` + JSON.stringify(Object.values<any>(t)?.[0]?.post, undefined, 2) + `|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
+      `node import.js 'uri:::` + keyT(t) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(t)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = {}|||const POST = {}|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
     ))
     const featureName = String(title).toLocaleLowerCase().split(' ').join('_')
+    const n_features = JSON.parse(JSON.stringify(features))
 
     msg.push(
       'scenario: ' + featureName,
       '\n',
       ...uri,
       '\n',
-      `node import.js 'feature:::` + featureName + `~~~module.exports = ` + JSON.stringify(features, undefined, 2) + `'`
+      `node import.js 'feature:::` + featureName + `~~~module.exports = ` + JSON.stringify(n_features, undefined, 2) + `'`
     )
 
     let post = {
@@ -76,7 +77,7 @@ export default function m(props: LogFeature_detailProps): any {
         <Pressable onPress={() => {
           LibNavigation.navigateForResult('log/url_list').then((res: any) => {
             const get = res[Object.keys(res)[0]].get
-            const post = res[Object.keys(res)[0]].post
+            let post = res[Object.keys(res)[0]].post
             const cGet = Object.keys(get).map((t: any) => ({ [t]: Object.values(get[t])[0] }))
             const cPost = Object.keys(post).map((t: any) => ({ [t]: Object.values(post[t])[0] }))
             const newGET = Object.assign({}, ...cGet)
@@ -108,9 +109,20 @@ export default function m(props: LogFeature_detailProps): any {
       {
         data?.[title]?.length > 0 &&
         <Pressable onPress={() => {
+          const dt = data[title][0]
+          const secure = dt[Object.keys(dt)[0]].secure
+          const get = dt[Object.keys(dt)[0]].get
+          let post = dt[Object.keys(dt)[0]].post
+          if (secure) {
+            delete post.access_token
+            delete post.api_key
+          }
+          const n_res = [
+            { [Object.keys(dt)[0]]: { get, post, secure: secure } }
+          ]
           LibDialog.confirm('RUN', 'RUN SCENARIO', "RUN", () => {
             LibProgress.show('Please wait...')
-            LogLoggerProperty.doLogger(data[title], (result: any) => {
+            LogLoggerProperty.doLogger(n_res, (result: any) => {
               LibProgress.hide()
               LibNavigation.navigate('log/detail', { data: result })
             })

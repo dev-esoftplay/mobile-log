@@ -1,6 +1,6 @@
 // withHooks
 
-import { applyStyle, LibIcon, LibNavigation, LibObject, LibStatusbar, LibStyle, LibTextstyle, useSafeState } from 'esoftplay';
+import { applyStyle, LibIcon, LibNavigation, LibObject, LibScroll, LibStatusbar, LibStyle, LibTextstyle, useSafeState } from 'esoftplay';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 
@@ -76,17 +76,19 @@ export default function m(props: LogFeature_detail_editProps): any {
           <LibTextstyle text={String(Object.keys(itemData))} textStyle={"headline"} style={applyStyle({ textAlign: "left" })} />
         </View>
       </View>
-
-      <View style={{ paddingVertical: 15, marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
-        <Text style={{ fontSize: 16 }}>{Object.keys(itemData)}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-          <View style={{ flex: 1 }} >
-            {
-              Object.values(itemData).map(renderItems)
-            }
+      <LibScroll>
+        <View style={{ paddingVertical: 15, marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
+          <Text style={{ fontSize: 16 }}>{Object.keys(itemData)}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+            <View style={{ flex: 1 }} >
+              {
+                Object.values(itemData).map(renderItems)
+              }
+            </View>
           </View>
         </View>
-      </View>
+        <View />
+      </LibScroll>
     </View>
   )
 }

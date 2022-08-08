@@ -31,13 +31,19 @@ export default function m(props: LogFeature_detail_itemProps): any {
                   <Text style={{ marginHorizontal: 10 }}>{"="}</Text>
                   <View style={{ flex: 5 }}>
                     {
-                      typeof x[t] == 'object' && Object.keys(x[t]).length > 0 ? Object.keys(x[t]).map((k: any, i2: number) => (
-                        <View key={i2} style={{ flexDirection: 'row', marginBottom: 5 }}>
-                          <Text style={{ flex: 2, fontSize: 12 }}>{k}</Text>
-                          <Text style={{ marginHorizontal: 10 }}>{':'}</Text>
-                          <Text style={{ flex: 3, fontSize: 12 }}>{Object.values<any>(x[t])[i2]}</Text>
-                        </View>
-                      ))
+                      typeof x[t] == 'object' && Object.keys(x[t]).length > 0 ? Object.keys(x[t]).map((k: any, i2: number) => {
+                        if (k == 'api_key' || k == 'access_token') {
+                          return null
+                        } else {
+                          return (
+                            <View key={i2} style={{ flexDirection: 'row', marginBottom: 5 }}>
+                              <Text style={{ flex: 2, fontSize: 12 }}>{k}</Text>
+                              <Text style={{ marginHorizontal: 10 }}>{':'}</Text>
+                              <Text style={{ flex: 3, fontSize: 12 }}>{Object.values<any>(x[t])[i2]}</Text>
+                            </View>
+                          )
+                        }
+                      })
                         :
                         <Text style={{ fontSize: 12 }}>{JSON.stringify(x[t])}</Text>
                     }

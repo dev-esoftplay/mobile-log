@@ -151,7 +151,19 @@ export default function m(props: LogItemProps): any {
                       </Pressable>
                       <Pressable onPress={() => {
                         props?.onClose?.()
-                        LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
+                        const dt = Object.values<any>(urlData)?.[props?.index]?.[i2]
+                        const secure = dt[Object.keys(dt)[0]].secure
+                        const get = dt[Object.keys(dt)[0]].get
+                        let post = dt[Object.keys(dt)[0]].post
+                        if (secure) {
+                          delete post.access_token
+                          delete post.api_key
+                        }
+                        const n_res = [
+                          { [Object.keys(dt)[0]]: { get, post, secure: secure } }
+                        ]
+                        // LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
+                        LogLoggerProperty.doLogger(n_res, (result: any) => {
                           LibNavigation.navigate<LogDetailArgs>('log/detail', { data: result })
                         })
                       }} style={{ marginTop: 10, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>

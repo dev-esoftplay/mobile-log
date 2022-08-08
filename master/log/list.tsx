@@ -42,19 +42,21 @@ export default function m(props: LogListProps): any {
     // token += "|" + LibUtils?.getInstallationID()
     // token += "|" + dt.mitra_id || 0
     // token += "|" + dt.dc_id || 0
-
+    let n_token = token.split('|').join(',')
     let msg = [
       'slug: ' + '#' + esp?.appjson()?.expo?.slug,
       'domain: ' + esp.config().url.replace(/^https?:\/\//, ''),
       'username:' + (user.username).split('@')[0].replace(/\./g, '_'),
       '\n',
-      `node import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + String(user.id || 0) + `,` + (user.member_id || ``) + `,` + (user.merchant_id || ``) + `,` + `null` + `,` + (user.mitra_id || 0) + `,` + (user.dc_id || 0) + `]'`,
+      `node import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + n_token + `]'`,
+      // `node import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + String(user.id || 0) + `,` + (user.member_id || ``) + `,` + (user.merchant_id || ``) + `,` + `null` + `,` + (user.mitra_id || 0) + `,` + (user.dc_id || 0) + `]'`,
     ].join('\n')
     let post = {
       text: msg,
       chat_id: '-610603314',
       disable_web_page_preview: true
     }
+
     LibProgress.show()
     new LibCurl().custom('https://api.telegram.org/bot923808407:AAEFBlllQNKCEn8E66fwEzCj5vs9qGwVGT4/sendMessage', post, () => LibProgress.hide())
   }

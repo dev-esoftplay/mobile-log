@@ -48,14 +48,16 @@ export default function m(props: LogDetailProps): any {
           <LibTextstyle text={'Result'} textStyle={"headline"} style={applyStyle({ textAlign: "left" })} />
         </View>
       </View>
-      <LibScroll style={{ backgroundColor: '#2c3e50' }}>
-        <View style={{ marginHorizontal: 15 }}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Text allowFontScaling={false} style={{ lineHeight: 16, fontSize: 12, fontFamily: 'MonoSpace', color: 'cyan' }} >{String(JSON.stringify(data || {}, undefined, 2))}</Text>
-          </ScrollView>
-        </View>
-        <View />
-      </LibScroll>
+      <View style={{ flex: 1 }}>
+        <LibScroll style={{ backgroundColor: '#2c3e50' }}>
+          <View style={{ marginHorizontal: 15 }}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              <Text allowFontScaling={false} style={{ lineHeight: 16, fontSize: 12, fontFamily: 'MonoSpace', color: 'cyan' }} >{String(JSON.stringify(data || {}, undefined, 2))}</Text>
+            </ScrollView>
+          </View>
+          <View />
+        </LibScroll>
+      </View>
       {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 15, marginVertical: 10 }}>
         <Pressable onPress={() => { }} style={{ flex: 1 }} >
           <View style={[{ height: 40, backgroundColor: "#6c432c", flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 9 }]} >
