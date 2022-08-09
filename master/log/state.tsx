@@ -80,7 +80,7 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
     }) : []
     const get = Object.assign({}, ..._get)
     const _post = post && Object.keys(post).map((key) => {
-      return ({ [key]: [decodeURI(post[key])] })
+      return ({ [key]: [decodeURIComponent(post[key])] })
     }) || []
     const postNew = Object.assign({}, ..._post)
 
