@@ -1,6 +1,8 @@
 // withHooks
+import { esp } from 'esoftplay';
+import { LibCrypt } from 'esoftplay/cache/lib/crypt.import';
+import { LogTokenProperty } from 'esoftplay/cache/log/token.import';
 
-import { esp, LibCrypt, LogTokenProperty } from "esoftplay";
 
 
 

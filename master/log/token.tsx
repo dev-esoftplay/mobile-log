@@ -1,6 +1,6 @@
 // withHooks
+import { useGlobalReturn, useGlobalState } from 'esoftplay';
 
-import { useGlobalReturn, useGlobalState } from "esoftplay"
 
 
 export interface LogTokenArgs {

@@ -1,7 +1,8 @@
 // withHooks
 // noPage
+import { esp, useGlobalReturn, useGlobalState } from 'esoftplay';
+import { LibObject } from 'esoftplay/cache/lib/object.import';
 
-import { esp, LibObject, useGlobalReturn, useGlobalState } from 'esoftplay';
 import moment from 'esoftplay/moment';
 import { } from 'react-native';
 
@@ -31,7 +32,6 @@ function doRepairUrl(url: string) {
     const fixGET = repaired[lastIdx].split('?').join('&')
 
     if (!isNaN(Number(uriParam))) {
-      console.log('masuk 1');
       url = repaired.slice(0, lastIdx).join('/')
       url += "?id=" + [fixGET];
     }

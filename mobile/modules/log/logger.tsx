@@ -1,7 +1,12 @@
 // withHooks
 // noPage
+import { esp } from 'esoftplay';
+import { LibProgress } from 'esoftplay/cache/lib/progress.import';
+import { LogFetcherProperty } from 'esoftplay/cache/log/fetcher.import';
+import { LogProgressProperty } from 'esoftplay/cache/log/progress.import';
+import { LogSql_inject } from 'esoftplay/cache/log/sql_inject.import';
+import { LogTokenProperty } from 'esoftplay/cache/log/token.import';
 
-import { esp, LibProgress, LogFetcherProperty, LogProgressProperty, LogSql_inject, LogTokenProperty } from 'esoftplay';
 
 
 export interface LogLoggerArgs {

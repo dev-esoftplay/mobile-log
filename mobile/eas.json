@@ -16,6 +16,12 @@
 			"simulator": true
 		}
 	},
+	"preview_build": {
+		"distribution": "internal",
+		"android": {
+			"buildType": "apk"
+		}
+	},
 	"production": {}
 },
 "submit": {
