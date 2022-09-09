@@ -1,5 +1,5 @@
 // withHooks
-import { applyStyle, useGlobalReturn, useGlobalState } from 'esoftplay';
+import { applyStyle, useGlobalReturn } from 'esoftplay';
 import { LibDialog } from 'esoftplay/cache/lib/dialog.import';
 import { LibIcon } from 'esoftplay/cache/lib/icon.import';
 import { LibList } from 'esoftplay/cache/lib/list.import';
@@ -8,6 +8,7 @@ import { LibObject } from 'esoftplay/cache/lib/object.import';
 import { LibStatusbar } from 'esoftplay/cache/lib/statusbar.import';
 import { LibStyle } from 'esoftplay/cache/lib/style.import';
 import { LibTextstyle } from 'esoftplay/cache/lib/textstyle.import';
+import useGlobalState from 'esoftplay/global';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
