@@ -1,13 +1,13 @@
 // withHooks
 import { applyStyle } from 'esoftplay';
-import { LibIcon } from 'esoftplay/cache/lib/icon.import';
-import { LibList } from 'esoftplay/cache/lib/list.import';
-import { LibNavigation } from 'esoftplay/cache/lib/navigation.import';
-import { LibStatusbar } from 'esoftplay/cache/lib/statusbar.import';
-import { LibStyle } from 'esoftplay/cache/lib/style.import';
-import { LibTextstyle } from 'esoftplay/cache/lib/textstyle.import';
-import { LogItem } from 'esoftplay/cache/log/item.import';
-import { LogStateProperty } from 'esoftplay/cache/log/state.import';
+import { LibIcon } from 'esoftplay/cache/lib/icon/import';
+import { LibList } from 'esoftplay/cache/lib/list/import';
+import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
+import { LibStatusbar } from 'esoftplay/cache/lib/statusbar/import';
+import { LibStyle } from 'esoftplay/cache/lib/style/import';
+import { LibTextstyle } from 'esoftplay/cache/lib/textstyle/import';
+import { LogItem } from 'esoftplay/cache/log/item/import';
+import { LogStateProperty } from 'esoftplay/cache/log/state/import';
 
 import React from 'react';
 import { Pressable, View } from 'react-native';

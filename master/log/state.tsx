@@ -1,7 +1,7 @@
 // withHooks
 // noPage
 import { esp, useGlobalReturn } from 'esoftplay';
-import { LibObject } from 'esoftplay/cache/lib/object.import';
+import { LibObject } from 'esoftplay/cache/lib/object/import';
 import useGlobalState from 'esoftplay/global';
 
 import moment from 'esoftplay/moment';

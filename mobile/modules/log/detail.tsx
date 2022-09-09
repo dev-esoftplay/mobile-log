@@ -1,13 +1,13 @@
 // withHooks
 import { applyStyle, esp } from 'esoftplay';
-import { LibCurl } from 'esoftplay/cache/lib/curl.import';
-import { LibIcon } from 'esoftplay/cache/lib/icon.import';
-import { LibNavigation } from 'esoftplay/cache/lib/navigation.import';
-import { LibProgress } from 'esoftplay/cache/lib/progress.import';
-import { LibScroll } from 'esoftplay/cache/lib/scroll.import';
-import { LibStatusbar } from 'esoftplay/cache/lib/statusbar.import';
-import { LibStyle } from 'esoftplay/cache/lib/style.import';
-import { LibTextstyle } from 'esoftplay/cache/lib/textstyle.import';
+import { LibCurl } from 'esoftplay/cache/lib/curl/import';
+import { LibIcon } from 'esoftplay/cache/lib/icon/import';
+import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
+import { LibProgress } from 'esoftplay/cache/lib/progress/import';
+import { LibScroll } from 'esoftplay/cache/lib/scroll/import';
+import { LibStatusbar } from 'esoftplay/cache/lib/statusbar/import';
+import { LibStyle } from 'esoftplay/cache/lib/style/import';
+import { LibTextstyle } from 'esoftplay/cache/lib/textstyle/import';
 
 import React from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';

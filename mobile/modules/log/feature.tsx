@@ -1,14 +1,14 @@
 // withHooks
 import { applyStyle, useGlobalReturn } from 'esoftplay';
-import { LibEditbox } from 'esoftplay/cache/lib/editbox.import';
-import { LibIcon } from 'esoftplay/cache/lib/icon.import';
-import { LibList } from 'esoftplay/cache/lib/list.import';
-import { LibNavigation } from 'esoftplay/cache/lib/navigation.import';
-import { LibObject } from 'esoftplay/cache/lib/object.import';
-import { LibStatusbar } from 'esoftplay/cache/lib/statusbar.import';
-import { LibStyle } from 'esoftplay/cache/lib/style.import';
-import { LibTextstyle } from 'esoftplay/cache/lib/textstyle.import';
-import { LogFeature_detailArgs } from 'esoftplay/cache/log/feature_detail.import';
+import { LibEditbox } from 'esoftplay/cache/lib/editbox/import';
+import { LibIcon } from 'esoftplay/cache/lib/icon/import';
+import { LibList } from 'esoftplay/cache/lib/list/import';
+import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
+import { LibObject } from 'esoftplay/cache/lib/object/import';
+import { LibStatusbar } from 'esoftplay/cache/lib/statusbar/import';
+import { LibStyle } from 'esoftplay/cache/lib/style/import';
+import { LibTextstyle } from 'esoftplay/cache/lib/textstyle/import';
+import { LogFeature_detailArgs } from 'esoftplay/cache/log/feature_detail/import';
 import useGlobalState from 'esoftplay/global';
 
 import React from 'react';

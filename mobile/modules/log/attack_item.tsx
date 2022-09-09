@@ -1,9 +1,9 @@
 // withHooks
-import { LibIcon } from 'esoftplay/cache/lib/icon.import';
-import { LibNavigation } from 'esoftplay/cache/lib/navigation.import';
-import { LibToastProperty } from 'esoftplay/cache/lib/toast.import';
-import { LibUtils } from 'esoftplay/cache/lib/utils.import';
-import { LogDetailArgs } from 'esoftplay/cache/log/detail.import';
+import { LibIcon } from 'esoftplay/cache/lib/icon/import';
+import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
+import { LibToastProperty } from 'esoftplay/cache/lib/toast/import';
+import { LibUtils } from 'esoftplay/cache/lib/utils/import';
+import { LogDetailArgs } from 'esoftplay/cache/log/detail/import';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';

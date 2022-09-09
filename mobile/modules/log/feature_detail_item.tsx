@@ -1,6 +1,6 @@
 // withHooks
-import { LibIcon } from 'esoftplay/cache/lib/icon.import';
-import { LibNavigation } from 'esoftplay/cache/lib/navigation.import';
+import { LibIcon } from 'esoftplay/cache/lib/icon/import';
+import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
