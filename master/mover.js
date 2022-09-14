@@ -94,7 +94,7 @@ const espPath = '../esoftplay/'
 if (fs.existsSync(espPath + '/modules/log')) {
 	if (fs.existsSync(espPath + "modules/lib/curl.ts")) {
 		let curl = fs.readFileSync(espPath + "modules/lib/curl.ts", { encoding: 'utf8' })
-		curl = curl.replace(`//api_logger_import`, `import { LogStateProperty } from 'esoftplay/cache/log/state.import';`)
+		curl = curl.replace(`//api_logger_import`, `import { LogStateProperty } from 'esoftplay/cache/log/state/import';`)
 		curl = curl.replace(`//api_logger`, `if (LogStateProperty) {
       LogStateProperty.doLogCurl(this.uri, this.url, post, this.isSecure)
     }`)
