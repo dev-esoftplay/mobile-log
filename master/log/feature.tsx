@@ -22,7 +22,7 @@ export interface LogFeatureProps {
 
 }
 
-const _state = useGlobalState({}, { persistKey: 'log/feature' })
+const _state = useGlobalState({}, { persistKey: 'log/feature', inFile: true })
 export function state(): useGlobalReturn<any> {
   return _state
 }

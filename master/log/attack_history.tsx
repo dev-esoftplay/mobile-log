@@ -21,7 +21,7 @@ export interface LogAttack_listProps {
 
 }
 
-const _state = useGlobalState<any>({}, { persistKey: 'log/attack_history' })
+const _state = useGlobalState<any>({}, { persistKey: 'log/attack_history', inFile: true })
 
 export function state(): useGlobalReturn<any> {
   return _state

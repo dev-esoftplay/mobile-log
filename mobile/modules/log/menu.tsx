@@ -2,7 +2,6 @@
 import { esp } from 'esoftplay';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
-import { LogStateProperty } from 'esoftplay/cache/log/state/import';
 
 import React from 'react';
 import { Pressable, Text } from 'react-native';
@@ -15,7 +14,7 @@ export interface LogMenuProps {
 
 }
 export default function m(props: LogMenuProps): any {
-  const [enableLog, setEnableLog] = LogStateProperty.enableLog().useState()
+  const enableLog = esp.modProp('log/state').enableLog().useSelector((s: any) => s)
 
   if (!!esp.config('log')?.enable) {
     return (

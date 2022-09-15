@@ -7,7 +7,6 @@ import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { LogDetailArgs } from 'esoftplay/cache/log/detail/import';
-import { LogLoggerProperty } from 'esoftplay/cache/log/logger/import';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -101,27 +100,31 @@ export default function m(props: LogItemProps): any {
                       <View key={i3} style={{ marginTop: 5 }}>
                         {
                           Object.keys(item3)?.map?.((item4: any, i4: number) => {
-                            return (
-                              <View key={i4} style={{ flexDirection: 'row', marginBottom: 5 }}>
-                                <Text style={{ flex: 1, fontSize: 12 }}>{item4}</Text>
-                                <Text style={{ fontSize: 12 }}>{"= "}</Text>
-                                <View style={{ flex: 5 }}>
-                                  {
-                                    (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
-                                      return (
-                                        <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                                          <Text style={{ flex: 2, fontSize: 12 }}>{item5}</Text>
-                                          <Text style={{ fontSize: 12 }}>{" : "}</Text>
-                                          <Text style={{ flex: 3, fontSize: 12 }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
-                                        </View>
-                                      )
-                                    })
-                                      :
-                                      <Text style={{ fontSize: 12 }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
-                                  }
+                            if (item4 != "response") {
+                              return (
+                                <View key={i4} style={{ flexDirection: 'row', marginBottom: 5 }}>
+                                  <Text style={{ flex: 1, fontSize: 12 }}>{item4}</Text>
+                                  <Text style={{ fontSize: 12 }}>{"= "}</Text>
+                                  <View style={{ flex: 5 }}>
+                                    {
+                                      (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
+                                        return (
+                                          <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
+                                            <Text style={{ flex: 2, fontSize: 12 }}>{item5}</Text>
+                                            <Text style={{ fontSize: 12 }}>{" : "}</Text>
+                                            <Text style={{ flex: 3, fontSize: 12 }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
+                                          </View>
+                                        )
+                                      })
+                                        :
+                                        <Text style={{ fontSize: 12 }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                    }
+                                  </View>
                                 </View>
-                              </View>
-                            )
+                              )
+                            } else {
+                              return null
+                            }
                           })}
                       </View>
                     ))
@@ -170,9 +173,11 @@ export default function m(props: LogItemProps): any {
                           { [Object.keys(dt)[0]]: { get, post, secure: secure } }
                         ]
                         // LogLoggerProperty.doLogger([Object.values<any>(urlData)?.[props?.index]?.[i2]], (result: any) => {
-                        LogLoggerProperty.doLogger(n_res, (result: any) => {
-                          LibNavigation.navigate<LogDetailArgs>('log/detail', { data: result })
-                        })
+                        // LogLoggerProperty.doLogger(n_res, (result: any) => {
+                        //   LibNavigation.navigate<LogDetailArgs>('log/detail', { data: result })
+                        // })
+                        LibNavigation.navigate<LogDetailArgs>('log/detail', { data: item2 })
+
                       }} style={{ marginTop: 10, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
                         <Text>{'RESULT'}</Text>
                       </Pressable>

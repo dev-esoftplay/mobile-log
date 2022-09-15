@@ -1,4 +1,5 @@
 // withHooks
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
@@ -125,7 +126,7 @@ export default function m(props: LogListProps): any {
         <Pressable onPress={() => {
           props?.onClose?.()
           LibDialog.warningConfirm('Hapus?', 'Hapus List Log?', 'Hapus', () => {
-            AsyncStorageLib.removeItem('lib_apitest').then(() => { LogStateProperty.state().reset() })
+            AsyncStorage.removeItem('lib_apitest').then(() => { LogStateProperty.state().reset() })
           }, 'Batal', () => { })
         }} >
           <LibIcon.AntDesign name="delete" />

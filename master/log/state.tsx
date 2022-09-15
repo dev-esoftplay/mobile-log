@@ -15,7 +15,7 @@ export interface LogStateProps {
 
 }
 
-const _state = useGlobalState([], { persistKey: 'lib_apitest' })
+const _state = useGlobalState([], { persistKey: 'lib_apitest', inFile: true })
 export function state(): useGlobalReturn<any> {
   return _state
 }
@@ -51,10 +51,10 @@ function fixUrl(url: string) {
   return fullUrl
 }
 
-export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean) {
-  if (!!esp.config('log')?.enable) {
+export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean, response: any) {
+  const logEnable = enableLog().get()
+  if (!!esp.config('log')?.enable && logEnable) {
     const allData = state().get() || []
-    const logEnable = enableLog().get()
 
     const fullURL = url + uri
     let uriOrigin = ''
@@ -92,12 +92,11 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
           time: moment().format('YYYY-MM-DD HH:mm:ss'),
           get: get,
           post: postNew,
+          response: response
         }
       }
       let dt = LibObject.unshift(allData, data)()
-      if (logEnable) {
-        state().set(dt)
-      }
+      state().set(dt)
     }
   }
 }
