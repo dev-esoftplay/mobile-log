@@ -1,5 +1,4 @@
 // withHooks
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
@@ -24,8 +23,8 @@ export interface LogListProps {
   onClose: () => void
 }
 export default function m(props: LogListProps): any {
-  const [urlList, setUrlList] = LogStateProperty.state().useState()
-  const user = UserClass.state().useSelector((s) => s)
+  const urlList = LogStateProperty.state().useSelector((x) => x)
+  const user = UserClass.state().useSelector((s: any) => s)
   const urlData = urlList?.reduce?.((r: any, a: any) => {
     r[Object.keys(a)[0]] = [...r[Object.keys(a)[0]] || [], a]
     return r
@@ -85,7 +84,7 @@ export default function m(props: LogListProps): any {
       remove()
     }, 'Batal', () => { })
   }
-
+  
   function renderItems(item: any, i: number) {
     return (
       <LogItem item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
@@ -126,7 +125,7 @@ export default function m(props: LogListProps): any {
         <Pressable onPress={() => {
           props?.onClose?.()
           LibDialog.warningConfirm('Hapus?', 'Hapus List Log?', 'Hapus', () => {
-            AsyncStorage.removeItem('lib_apitest').then(() => { LogStateProperty.state().reset() })
+            LogStateProperty.state().reset()
           }, 'Batal', () => { })
         }} >
           <LibIcon.AntDesign name="delete" />
@@ -134,6 +133,7 @@ export default function m(props: LogListProps): any {
       </View>
       <LibList
         style={{ flex: 1 }}
+        key={urlList.length}
         data={Object.keys(urlData)}
         keyExtractor={(t: any, i: number) => i.toString()}
         renderItem={renderItems}
