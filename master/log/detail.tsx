@@ -60,7 +60,7 @@ export default function m(props: LogDetailProps): any {
         <LibScroll style={{ backgroundColor: '#2c3e50' }}>
           <View style={{ marginHorizontal: 15 }}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <Text allowFontScaling={false} style={{ lineHeight: 16, fontSize: 12, fontFamily: 'MonoSpace', color: 'cyan' }} >{String(JSON.stringify(data || {}, undefined, 2))}</Text>
+              <Text allowFontScaling={false} selectable style={{ lineHeight: 16, fontSize: 12, fontFamily: 'MonoSpace', color: 'cyan' }} >{String(JSON.stringify(data || {}, undefined, 2))}</Text>
             </ScrollView>
           </View>
           <View />
