@@ -48,7 +48,7 @@ export default function m(props: LogItem1Props): any {
         onPress={() => {
           esp.log(esp.logColor.backgroundBlue, x);
           const index = Object.keys(dt)[0]
-          const c = LibObject.assign(dt, { [2]: x })(index)
+          const c = LibObject.assign(dt, { [2]: i })(index)
           setdt(c)
         }}
       />
