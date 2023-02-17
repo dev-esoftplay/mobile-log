@@ -40,6 +40,12 @@ export default class m {
     Storage.removeItem('log/reporter')
   }
 
+  static deleteReporterEmail(): void {
+    new LibCurl('user_reporter_delete', null, (res, msg) => {
+      this.reset()
+    }, (err) => { }, 1)
+  }
+
   static sendReport(cb?: () => void): void {
     setTimeout(async () => {
       const email = UserClass.state().get().email
@@ -66,6 +72,7 @@ export default class m {
         );
         const result = await response.json();
         this.reset()
+        this.deleteReporterEmail()
         cb?.()
         LibProgress.hide()
       } catch (error) {
