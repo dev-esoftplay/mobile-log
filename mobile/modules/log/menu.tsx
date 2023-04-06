@@ -21,13 +21,13 @@ export default function m(props: LogMenuProps): any {
   if (!!esp.config('log')?.enable) {
     return (
       <Pressable
-        style={{ marginVertical: 1, paddingHorizontal: 15, paddingVertical: 5, borderRadius: 0, flexDirection: 'row', alignItems: 'center', backgroundColor: enableLog ? "#2CB159" : "#E63A3A" }}
+        style={{ marginVertical: 1, paddingHorizontal: 15, borderRadius: 0, flexDirection: 'row', alignItems: 'center', backgroundColor: enableLog ? "#2CB159" : "#E63A3A" }}
         onPress={() => {
           LibNavigation.navigate('log/list')
         }}>
-        <LibIcon.SimpleLineIcons name='arrow-up' size={16} color='white' />
-        <Text style={{ color: 'white', flex: 1 }} >  API DEBUGGER</Text>
-        <Text style={{ color: 'white' }} >{routes?.routes?.[routes?.routes?.length - 1]?.name || 'root'}</Text>
+        <LibIcon.SimpleLineIcons name='arrow-up' size={10} color='white' />
+        <Text style={{ fontSize: 14, color: 'white', flex: 1 }} >  API DEBUGGER</Text>
+        <Text style={{ fontSize: 14, color: 'white' }} >{routes?.routes?.[routes?.routes?.length - 1]?.name || 'root'}</Text>
       </Pressable>
     )
   }
