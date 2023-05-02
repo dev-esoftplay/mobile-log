@@ -5,9 +5,14 @@ import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibObject } from 'esoftplay/cache/lib/object/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { UserClass } from 'esoftplay/cache/user/class/import';
+import esp from 'esoftplay/esp';
 import useGlobalState from 'esoftplay/global';
 import Storage from 'esoftplay/storage';
+import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
+const { manifest } = Constants;
+
 
 const state = useGlobalState<any[]>([], { persistKey: 'log/reporter', inFile: true, jsonBeautify: true })
 const isHasAccess = useGlobalState(false, { persistKey: 'log/reporter_access' })
@@ -56,7 +61,14 @@ export default class m {
         const fileInfo = await FileSystem.getInfoAsync(fileUri, {});
         const fileName = fileInfo?.uri?.split('/').pop();
         const formData = new FormData();
-        formData.append('caption', '#report from ' + email);
+        let config = esp?.config?.()
+        let msg = [
+          '#report from ' + email,
+          '\nslug: ' + "#" + manifest?.slug,
+          'dev: ' + Platform.OS + ' - ' + Constants.deviceName,
+          'app/pub_id: ' + Constants.appOwnership + '/' + (config?.publish_id || '-'),
+        ].join('\n')
+        formData.append('caption', msg);
         formData.append('chat_id', '-1001737180019');
         formData.append('document', {
           uri: fileUri,

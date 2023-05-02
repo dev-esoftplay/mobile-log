@@ -2,7 +2,9 @@
 // noPage
 import { esp, useGlobalReturn } from 'esoftplay';
 import { LibObject } from 'esoftplay/cache/lib/object/import';
+import { LogReporter } from 'esoftplay/cache/log/reporter/import';
 import useGlobalState from 'esoftplay/global';
+
 
 import moment from 'esoftplay/moment';
 import { } from 'react-native';
@@ -52,6 +54,7 @@ function fixUrl(url: string) {
 }
 
 export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean, response: any) {
+  LogReporter?.addLog?.(url + uri, post, response)
   const logEnable = enableLog().get()
   if (!!esp.config('log')?.enable && logEnable) {
     const allData = state().get() || []
