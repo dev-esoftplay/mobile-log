@@ -21,7 +21,7 @@ export default class m {
   static getAccess(): void {
     new LibCurl('user_reporter', null, (res, msg) => {
       isHasAccess.set(Number(res?.send) == 0 ? false : true)
-    }, (err) => { }, 1)
+    }, (err) => { }, 0)
   }
 
   static accessState(): useGlobalReturn<boolean> {
