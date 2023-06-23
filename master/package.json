@@ -1,11 +1,11 @@
 {
   "name": "esoftplay-log",
-  "version": "0.0.2-p",
+  "version": "0.0.2-q",
   "description": "log module on esoftplay framework",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "node ./mover.js"
+    "postinstall": "node ../esoftplay/bin/mover.js esoftplay-log"
   },
   "keywords": [
     "espftplay-log",
