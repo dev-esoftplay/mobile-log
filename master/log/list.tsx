@@ -84,7 +84,7 @@ export default function m(props: LogListProps): any {
       remove()
     }, 'Batal', () => { })
   }
-  
+
   function renderItems(item: any, i: number) {
     return (
       <LogItem item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
@@ -94,11 +94,11 @@ export default function m(props: LogListProps): any {
   return (
     <View style={{ backgroundColor: "white", height: '100%' }}>
       <View style={{ flexDirection: 'row', padding: 10, paddingTop: LibStyle.STATUSBAR_HEIGHT, alignItems: 'center', backgroundColor: 'white', marginBottom: 2, ...LibStyle.elevation(2) }}>
-        <Pressable onPress={() => LibNavigation.back()} style={{ flexDirection: 'row', alignItems: 'center' }} >
+        <Pressable onPress={() => LibNavigation.back()} style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }} >
           <LibIcon.SimpleLineIcons name='arrow-down' size={16} />
           <Text style={{ marginLeft: 10 }}>{'API DEBUGGER : '}</Text>
         </Pressable>
-        <Pressable style={{ marginRight: 10 }} onPress={() => setEnableLog(!enableLog)} >
+        <Pressable style={{ marginRight: 10, padding: 10, paddingRight: 30 }} hitSlop={10} onPress={() => setEnableLog(!enableLog)} >
           <Text style={{ fontWeight: "bold", color: enableLog ? '#2CB159' : '#E63A3A' }} >{enableLog ? "ON" : "OFF"}</Text>
         </Pressable>
         <View style={{ flex: 1 }} />
