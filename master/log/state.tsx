@@ -17,7 +17,7 @@ export interface LogStateProps {
 
 }
 
-const _state = useGlobalState([], { persistKey: 'lib_apitest', inFile: true })
+const _state = useGlobalState([], { persistKey: 'lib_apitest', inFile: true, loadOnInit: true })
 export function state(): useGlobalReturn<any> {
   return _state
 }
