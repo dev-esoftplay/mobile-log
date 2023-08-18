@@ -1,4 +1,5 @@
 // withHooks
+import { useSafeState } from 'esoftplay';
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
@@ -6,7 +7,7 @@ import { LibList } from 'esoftplay/cache/lib/list/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { LibStyle } from 'esoftplay/cache/lib/style/import';
-import { LogItem } from 'esoftplay/cache/log/item/import';
+import { LogItem2 } from 'esoftplay/cache/log/item2/import';
 import { LogStateProperty } from 'esoftplay/cache/log/state/import';
 import { LogTokenProperty } from 'esoftplay/cache/log/token/import';
 import { UserClass } from 'esoftplay/cache/user/class/import';
@@ -23,7 +24,7 @@ export interface LogListProps {
   onClose: () => void
 }
 export default function m(props: LogListProps): any {
-  const urlList = LogStateProperty.state().useSelector((x) => x)
+  const urlList = LogStateProperty.state().get()
   const user = UserClass.state().useSelector((s: any) => s)
   const urlData = urlList?.reduce?.((r: any, a: any) => {
     r[Object.keys(a)[0]] = [...r[Object.keys(a)[0]] || [], a]
@@ -31,6 +32,7 @@ export default function m(props: LogListProps): any {
   }, {});
   const [enableLog, setEnableLog] = LogStateProperty.enableLog().useState()
   const token = LogTokenProperty.state().useSelector(s => s)
+  const [counter, setCounter] = useSafeState(0)
 
   // useEffect(() => {
   //   LogTokenProperty.buildToken([
@@ -82,60 +84,70 @@ export default function m(props: LogListProps): any {
 
     LibDialog.warningConfirm('Hapus?', "Hapus Log " + item + " ?", 'Hapus', () => {
       remove()
+      setCounter(counter + 1)
     }, 'Batal', () => { })
   }
-  
+
   function renderItems(item: any, i: number) {
     return (
-      <LogItem item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
+      <LogItem2 item={item} key={i} urlData={urlData} index={i} onClose={props.onClose} onRemoveItem={() => { removeLogItem(item) }} />
     )
   }
 
   return (
     <View style={{ backgroundColor: "white", height: '100%' }}>
-      <View style={{ flexDirection: 'row', padding: 10, paddingTop: LibStyle.STATUSBAR_HEIGHT, alignItems: 'center', backgroundColor: 'white', marginBottom: 2, ...LibStyle.elevation(2) }}>
-        <Pressable onPress={() => LibNavigation.back()} style={{ flexDirection: 'row', alignItems: 'center' }} >
-          <LibIcon.SimpleLineIcons name='arrow-down' size={16} />
-          <Text style={{ marginLeft: 10 }}>{'API DEBUGGER : '}</Text>
-        </Pressable>
-        <Pressable style={{ marginRight: 10 }} onPress={() => setEnableLog(!enableLog)} >
-          <Text style={{ fontWeight: "bold", color: enableLog ? '#2CB159' : '#E63A3A' }} >{enableLog ? "ON" : "OFF"}</Text>
-        </Pressable>
-        <View style={{ flex: 1 }} />
-        {
-          user?.id &&
-          <Pressable style={{ marginHorizontal: 10 }} onPress={() => {
-            LibDialog.confirm("Konfirmasi ?", "Kirim User Token?", "KIRIM", () => sendToken(), "BATAL", () => { })
-          }} >
-            <LibIcon.AntDesign name="user" />
+      <View style={{ padding: 10, paddingTop: LibStyle.STATUSBAR_HEIGHT, backgroundColor: 'white', marginBottom: 2, ...LibStyle.elevation(2) }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Pressable onPress={() => LibNavigation.back()} style={{ flexDirection: 'row', alignItems: 'center' }} >
+            <LibIcon.SimpleLineIcons name='arrow-down' size={16} />
+            <Text style={{ marginLeft: 10 }}>{'API DEBUGGER : '}</Text>
           </Pressable>
-        }
-        <Pressable onPress={() => {
-          props?.onClose?.()
-          LibNavigation.navigate('log/feature')
-        }} style={{ marginRight: 10 }} >
-          <LibIcon name="bug-outline" />
-        </Pressable>
-        <Pressable onPress={() => {
-          props?.onClose?.()
-          LibNavigation.navigate('log/attack_history')
-        }} style={{ marginRight: 10 }} >
-          <LibIcon name="format-list-bulleted" />
-        </Pressable>
-        <Pressable onPress={() => {
-          props?.onClose?.()
-          LibDialog.warningConfirm('Hapus?', 'Hapus List Log?', 'Hapus', () => {
-            LogStateProperty.state().reset()
-          }, 'Batal', () => { })
-        }} >
-          <LibIcon.AntDesign name="delete" />
-        </Pressable>
+          <Pressable style={{ marginRight: 10, padding: 10, paddingRight: 30 }} hitSlop={10} onPress={() => setEnableLog(!enableLog)} >
+            <Text style={{ fontWeight: "bold", color: enableLog ? '#2CB159' : '#E63A3A' }} >{enableLog ? "ON" : "OFF"}</Text>
+          </Pressable>
+        </View>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10, marginHorizontal: 5 }}>
+          {
+            user?.id &&
+            <Pressable style={{ alignItems: 'center', justifyContent: 'center' }} onPress={() => {
+              LibDialog.confirm("Konfirmasi ?", "Kirim User Token?", "KIRIM", () => sendToken(), "BATAL", () => { })
+            }} >
+              <LibIcon name="account-outline" size={28} color='#004085' />
+            </Pressable>
+          }
+          <Pressable onPress={() => {
+            props?.onClose?.()
+            LibNavigation.navigate('log/feature')
+          }} style={{ alignItems: 'center', justifyContent: 'center' }} >
+            <LibIcon name="bug-outline" size={28} color='#004085' />
+          </Pressable>
+          <Pressable onPress={() => {
+            props?.onClose?.()
+            LibNavigation.navigate('log/attack_history')
+          }} style={{ alignItems: 'center', justifyContent: 'center' }} >
+            <LibIcon name="format-list-bulleted" size={28} color='#004085' />
+          </Pressable>
+          <Pressable onPress={() => {
+            props?.onClose?.()
+            if (urlList.length > 0) {
+              LibDialog.warningConfirm('Hapus?', 'Hapus List Log?', 'Hapus', () => {
+                LogStateProperty.state().reset()
+                setCounter(counter + 1)
+              }, 'Batal', () => { })
+            }
+          }} style={{ alignItems: 'center', justifyContent: 'center' }} >
+            <LibIcon name="delete" size={28} color='#E63A3A' />
+          </Pressable>
+        </View>
       </View>
       <LibList
         style={{ flex: 1 }}
-        key={urlList.length}
+        extraData={urlList}
+        staticHeight={50}
+        onRefresh={() => {
+          setCounter(counter + 1)
+        }}
         data={Object.keys(urlData)}
-        keyExtractor={(t: any, i: number) => i.toString()}
         renderItem={renderItems}
       />
     </View>

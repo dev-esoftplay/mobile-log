@@ -126,7 +126,7 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
       })
     } else if (intrude) {
       let newResult: any = []
-      intrude(fixUris(currentRouteKey), GET, POST, inject, 0)
+      doIntrude(fixUris(currentRouteKey), GET, POST, inject, 0)
 
       function result(res: any) {
         let restructure = res.map((item: any, i: number) =>
@@ -148,7 +148,7 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
         logResults(restructure)
       }
 
-      function intrude(url: string, get: any, post: any, value: any, index: number) {
+      function doIntrude(url: string, get: any, post: any, value: any, index: number) {
         const currentValue = value[index]
         const maxLength = value.length - 1
         // const maxLength = 10
@@ -176,7 +176,7 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
             esp.log(esp.logColor.green, uri);
             LogProgressProperty.curValue().set({ current_value: currentValue, result_length: JSON.stringify(res).length })
             LogProgressProperty.state().set(newResult.length)
-            intrude(url, GET, POST, value, index + 1)
+            doIntrude(url, GET, POST, value, index + 1)
           } else {
             result(newResult)
           }

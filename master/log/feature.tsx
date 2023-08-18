@@ -32,10 +32,10 @@ export default function m(props: LogFeatureProps): any {
 
   function renderItems(item: any, i: number) {
     return (
-      <View key={i} style={{ paddingVertical: 15, marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
+      <View key={i} style={{ marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
         <Pressable
           onPress={() => { LibNavigation.navigate<LogFeature_detailArgs>('log/feature_detail', { title: item, index: item }) }}
-          style={{ flexDirection: 'row', alignItems: 'center' }}>
+          style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 15 }}>
           <Text style={{ flex: 1, fontSize: 16 }}>{item}</Text>
           <Pressable onPress={() => {
             setData(LibObject.unset(data, item)())
