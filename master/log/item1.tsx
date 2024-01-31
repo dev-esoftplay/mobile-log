@@ -1,9 +1,9 @@
 // withHooks
-import { esp, useSafeState } from 'esoftplay';
 import { LibObject } from 'esoftplay/cache/lib/object/import';
 import { LogFeature_detail_edit_paramProperty } from 'esoftplay/cache/log/feature_detail_edit_param/import';
 import { LogItem_array } from 'esoftplay/cache/log/item_array/import';
 import { LogItem_object } from 'esoftplay/cache/log/item_object/import';
+import useSafeState from 'esoftplay/state';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -30,7 +30,7 @@ export default function m(props: LogItem1Props): any {
         item={x}
         data={item[props.params][item3][x]}
         onPress={() => {
-          esp.log(esp.logColor.backgroundMagenta, x);
+          // esp.log(esp.logColor.backgroundMagenta, x);
           const index = Object.keys(dt)[0]
           const c = LibObject.assign(dt, { [2]: x })(index)
           setdt(c)
@@ -46,7 +46,7 @@ export default function m(props: LogItem1Props): any {
         index={i}
         data={x}
         onPress={() => {
-          esp.log(esp.logColor.backgroundBlue, x);
+          // esp.log(esp.logColor.backgroundBlue, x);
           const index = Object.keys(dt)[0]
           const c = LibObject.assign(dt, { [2]: i })(index)
           setdt(c)

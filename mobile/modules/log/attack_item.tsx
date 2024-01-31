@@ -3,7 +3,6 @@ import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibToastProperty } from 'esoftplay/cache/lib/toast/import';
 import { LibUtils } from 'esoftplay/cache/lib/utils/import';
-import { LogDetailArgs } from 'esoftplay/cache/log/detail/import';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -76,7 +75,7 @@ export default function m(props: LogAttack_itemProps): any {
   return (
     <View style={{ paddingVertical: 15, marginHorizontal: 10, borderBottomWidth: 1, borderBottomColor: '#e6e6e6' }}>
       <Pressable onPress={() => {
-        LibNavigation.navigate<LogDetailArgs>('log/detail', {
+        LibNavigation.navigate('log/detail', {
           data: [data]
         })
       }}>

@@ -1,5 +1,4 @@
 // withHooks
-import { useSafeState } from 'esoftplay';
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
@@ -13,6 +12,7 @@ import { LogTokenProperty } from 'esoftplay/cache/log/token/import';
 import { UserClass } from 'esoftplay/cache/user/class/import';
 
 import esp from 'esoftplay/esp';
+import useSafeState from 'esoftplay/state';
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
 

@@ -3,6 +3,8 @@
     "enable": 0
   },
   "fonts": {
-    "MonoSpace": "MonoSpace.ttf"
+    "Arial": "Arial.ttf",
+    "ArialBold": "ArialBold.ttf",
+    "SFProText": "SFProText.ttf"
   }
 }

@@ -1,6 +1,5 @@
 // withHooks
 // noPage
-import { esp } from 'esoftplay';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { LogFetcherProperty } from 'esoftplay/cache/log/fetcher/import';
 import { LogProgressProperty } from 'esoftplay/cache/log/progress/import';
@@ -173,7 +172,7 @@ export function doLogger(data: any, callback: (result: any, url?: string) => voi
               result_length: JSON.stringify(res).length,
               ...res
             })
-            esp.log(esp.logColor.green, uri);
+            // esp.log(esp.logColor.green, uri);
             LogProgressProperty.curValue().set({ current_value: currentValue, result_length: JSON.stringify(res).length })
             LogProgressProperty.state().set(newResult.length)
             doIntrude(url, GET, POST, value, index + 1)

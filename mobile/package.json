@@ -16,7 +16,7 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "@react-navigation/stack": "^6.2.1",
-    "esoftplay": "0.0.124-i",
+    "esoftplay": "0.0.136-w",
     "expo": "~45.0.0",
     "expo-camera": "~12.2.0",
     "expo-clipboard": "~3.0.1",
@@ -50,8 +50,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
-    "@types/react": "^18.0.14",
-    "@types/react-native": "^0.68.0",
+    "@types/react": "17.0.2",
+    "@types/react-native": "^0.68.2",
     "babel-plugin-transform-react-native-style-optimizer": "^0.0.9",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "typescript": "^4.7.4"
