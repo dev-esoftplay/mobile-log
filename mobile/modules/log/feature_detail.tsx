@@ -98,7 +98,7 @@ export default function m(props: LogFeature_detailProps): any {
             const newPOST = Object.assign({}, ...cPost)
             LibProgress.show('Please wait..')
             LogLoggerProperty.doLogger([res], (result: any) => {
-              LibProgress.hide
+              LibProgress.hide()
               const idx: any = Object?.keys(res)
               const c = LibObject.assign(res, { get: newGET, post: newPOST, response: result?.[0]?.[idx].RESPONSE })(idx)
               setData(LibObject.push(data, c)(title))

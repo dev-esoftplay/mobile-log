@@ -96,8 +96,10 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
       }
       let dt = LibObject.unshift(allData, data)()
       /* start record feature */
-      const key = LogFeature_recordProperty.recordedKey.get()
-      LogFeatureProperty.state().set((old: any) => LibObject.push(old, data)(key))
+      if (!!LogFeature_recordProperty.recordState.get()) {
+        const key = LogFeature_recordProperty.recordedKey.get()
+        LogFeatureProperty.state().set((old: any) => LibObject.push(old, data)(key))
+      }
       /* end of record feature */
       state().set(dt)
     }
