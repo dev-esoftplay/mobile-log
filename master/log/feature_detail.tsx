@@ -1,6 +1,5 @@
 // withHooks
 import { applyStyle } from 'esoftplay';
-import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibList } from 'esoftplay/cache/lib/list/import';
@@ -14,6 +13,7 @@ import { LogFeatureProperty } from 'esoftplay/cache/log/feature/import';
 import { LogFeature_detail_item } from 'esoftplay/cache/log/feature_detail_item/import';
 import { LogLoggerProperty } from 'esoftplay/cache/log/logger/import';
 import esp from 'esoftplay/esp';
+import Storage from 'esoftplay/storage';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -41,11 +41,6 @@ export default function m(props: LogFeature_detailProps): any {
       return Object.assign({}, ...key)
     }
 
-    let msg: any = [
-      'slug: ' + '#' + esp?.appjson()?.expo?.slug,
-      'domain: ' + config?.url.replace(/^https?:\/\//, ''),
-    ]
-
     const features = data[title].map((t: any) => [keyT(t), { GET: JSON.stringify(Object.values<any>(t)?.[0]?.get) != '{}' ? newParams(Object.values<any>(t)?.[0]?.get) : undefined, POST: JSON.stringify(Object.values<any>(t)?.[0]?.post) != "{}" ? newParams(Object.values<any>(t)?.[0]?.post) : undefined }])
     const uri = data[title].map((t: any) => (
       `bun import.js 'uri:::` + keyT(t) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(t)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = {}|||const POST = {}|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
@@ -53,21 +48,26 @@ export default function m(props: LogFeature_detailProps): any {
     const featureName = String(title).toLocaleLowerCase().split(' ').join('_')
     const n_features = JSON.parse(JSON.stringify(features))
 
-    msg.push(
+    let notes: string[] = [
+      'slug: ' + '#' + esp?.appjson()?.expo?.slug,
+      'domain: ' + config?.url.replace(/^https?:\/\//, ''),
       'scenario: ' + featureName,
-      '\n',
+    ]
+    let msg: string[] = []
+    msg.push(
       ...uri,
       '\n',
       `bun import.js 'feature:::` + featureName + `~~~module.exports = ` + JSON.stringify(n_features, undefined, 2) + `'`
     )
 
-    let post = {
-      text: msg.join('\n'),
-      chat_id: '-610603314',
-      disable_web_page_preview: true
-    }
-    LibProgress.show('Please wait..')
-    new LibCurl().custom('https://api.telegram.org/bot923808407:AAEFBlllQNKCEn8E66fwEzCj5vs9qGwVGT4/sendMessage', post, () => LibProgress.hide())
+    LibProgress.show('Sedang mengirim skenario ke Telegram..')
+    Storage.setItem('log_scenario', msg.join('\n')).then((v) => {
+      Storage.sendTelegram('log_scenario', notes.join('\n'), () => {
+        LibProgress.hide()
+      }, () => {
+        LibProgress.hide()
+      }, '-610603314', () => featureName)
+    })
   }
 
 

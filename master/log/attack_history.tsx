@@ -39,7 +39,7 @@ export default function m(props: LogAttack_listProps): any {
           <Text style={{ flex: 1, fontSize: 16, fontFamily: 'MonoSpace' }}>{item}</Text>
           <Pressable onPress={() => {
             LibDialog.warningConfirm('Hapus?', "Hapus Log " + item + " ?", 'Hapus', () => {
-              setState(LibObject.unset(state, item)())
+              setState((old: any) => LibObject.unset(old, item)())
             }, 'Batal', () => { })
           }} style={{ marginLeft: 5 }} >
             <LibIcon.AntDesign name="delete" />
@@ -61,6 +61,7 @@ export default function m(props: LogAttack_listProps): any {
         </View>
       </View>
       <LibList
+        extraData={state}
         data={Object.keys(state)}
         renderItem={renderItems}
       />
