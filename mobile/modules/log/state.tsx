@@ -1,10 +1,12 @@
 // withHooks
 // noPage
-import { esp, useGlobalReturn } from 'esoftplay';
-import { LibObject } from 'esoftplay/cache/lib/object/import';
-import { LogReporter } from 'esoftplay/cache/log/reporter/import';
-import useGlobalState from 'esoftplay/global';
 
+import { LibObject } from 'esoftplay/cache/lib/object/import';
+import { LogFeatureProperty } from 'esoftplay/cache/log/feature/import';
+import { LogFeature_recordProperty } from 'esoftplay/cache/log/feature_record/import';
+import { LogReporter } from 'esoftplay/cache/log/reporter/import';
+import esp from 'esoftplay/esp';
+import useGlobalState, { useGlobalReturn } from 'esoftplay/global';
 
 import moment from 'esoftplay/moment';
 import { } from 'react-native';
@@ -66,16 +68,10 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
       const urls = fixUrl(fullURL)
       uriOrigin = urls.replace(/(https?:\/\/)/g, '')
       let uriArray = uriOrigin.split('/')
-      let domain = uriArray[0]
-
-      if (!domain.startsWith('api.')) {
-        uriOrigin = ''
-      } else {
-        let uri = uriArray.slice(1, uriArray.length - 1).join('/')
-        let get = uriArray[uriArray.length - 1];
-        let newURI = uri != "" ? uri + '/' : uri
-        uriOrigin = newURI + get
-      }
+      let uri = uriArray.slice(1, uriArray.length - 1).join('/')
+      let get = uriArray[uriArray.length - 1];
+      let newURI = uri != "" ? uri + '/' : uri
+      uriOrigin = newURI + get
     }
     const complete_uri = uriOrigin
     const _uri = complete_uri.includes('?') ? complete_uri.split('?')[0] : complete_uri
@@ -99,6 +95,10 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
         }
       }
       let dt = LibObject.unshift(allData, data)()
+      /* start record feature */
+      const key = LogFeature_recordProperty.recordedKey.get()
+      LogFeatureProperty.state().set((old: any) => LibObject.push(old, data)(key))
+      /* end of record feature */
       state().set(dt)
     }
   }

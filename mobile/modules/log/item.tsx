@@ -1,12 +1,12 @@
 // withHooks
 // noPage
-import { esp, useSafeState } from 'esoftplay';
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
-import { LogDetailArgs } from 'esoftplay/cache/log/detail/import';
+import esp from 'esoftplay/esp';
+import useSafeState from 'esoftplay/state';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -176,7 +176,7 @@ export default function m(props: LogItemProps): any {
                         // LogLoggerProperty.doLogger(n_res, (result: any) => {
                         //   LibNavigation.navigate<LogDetailArgs>('log/detail', { data: result })
                         // })
-                        LibNavigation.navigate<LogDetailArgs>('log/detail', { data: item2 })
+                        LibNavigation.navigate('log/detail', { data: item2 })
 
                       }} style={{ marginTop: 10, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
                         <Text>{'RESULT'}</Text>

@@ -1,5 +1,5 @@
 // withHooks
-import { applyStyle, useSafeState } from 'esoftplay';
+import { applyStyle } from 'esoftplay';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibObject } from 'esoftplay/cache/lib/object/import';
@@ -7,6 +7,7 @@ import { LibScroll } from 'esoftplay/cache/lib/scroll/import';
 import { LibStatusbar } from 'esoftplay/cache/lib/statusbar/import';
 import { LibStyle } from 'esoftplay/cache/lib/style/import';
 import { LibTextstyle } from 'esoftplay/cache/lib/textstyle/import';
+import useSafeState from 'esoftplay/state';
 
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';

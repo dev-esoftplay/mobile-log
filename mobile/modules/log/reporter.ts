@@ -1,12 +1,11 @@
 
 
-import { useGlobalReturn } from 'esoftplay';
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibObject } from 'esoftplay/cache/lib/object/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { UserClass } from 'esoftplay/cache/user/class/import';
 import esp from 'esoftplay/esp';
-import useGlobalState from 'esoftplay/global';
+import useGlobalState, { useGlobalReturn } from 'esoftplay/global';
 import Storage from 'esoftplay/storage';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';

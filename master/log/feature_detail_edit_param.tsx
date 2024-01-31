@@ -1,5 +1,5 @@
 // withHooks
-import { applyStyle, esp, useGlobalReturn, useSafeState } from 'esoftplay';
+import { applyStyle } from 'esoftplay';
 import { LibIcon } from 'esoftplay/cache/lib/icon/import';
 import { LibInput } from 'esoftplay/cache/lib/input/import';
 import { LibList } from 'esoftplay/cache/lib/list/import';
@@ -10,7 +10,8 @@ import { LibStyle } from 'esoftplay/cache/lib/style/import';
 import { LibTextstyle } from 'esoftplay/cache/lib/textstyle/import';
 import { LogFeatureProperty } from 'esoftplay/cache/log/feature/import';
 import { LogFeature_detail_edit_param_item } from 'esoftplay/cache/log/feature_detail_edit_param_item/import';
-import useGlobalState from 'esoftplay/global';
+import useGlobalState, { useGlobalReturn } from 'esoftplay/global';
+import useSafeState from 'esoftplay/state';
 
 import React, { useEffect, useRef } from 'react';
 import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
@@ -27,7 +28,7 @@ export interface LogFeature_detail_edit_paramProps {
 
 }
 
-const _state = useGlobalState<any>()
+const _state = useGlobalState<any>(undefined)
 export function state(): useGlobalReturn<any> {
   return _state
 }
@@ -64,7 +65,7 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
                               // Object.keys(item)[0] + ':' + String(item2).toUpperCase() + ':'
                               const idxs = Object.keys(item)[0]
                               setdt(LibObject.set(dt, { [idxs]: { 0: String(item2).toUpperCase() } })())
-                              esp.log(esp.logColor.cyan, Object.keys(item)[0], item2)
+                              // esp.log(esp.logColor.cyan, Object.keys(item)[0], item2)
                             }}
                             key={id}
                             item={t}
