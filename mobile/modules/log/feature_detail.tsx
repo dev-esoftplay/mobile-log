@@ -47,7 +47,7 @@ export default function m(props: LogFeature_detailProps): any {
 
     const features = data[title].map((t: any) => [keyT(t), { GET: JSON.stringify(Object.values<any>(t)?.[0]?.get) != '{}' ? newParams(Object.values<any>(t)?.[0]?.get) : undefined, POST: JSON.stringify(Object.values<any>(t)?.[0]?.post) != "{}" ? newParams(Object.values<any>(t)?.[0]?.post) : undefined }])
     const uri = data[title].map((t: any) => (
-      `node import.js 'uri:::` + keyT(t) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(t)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = {}|||const POST = {}|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
+      `bun import.js 'uri:::` + keyT(t) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(t)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = {}|||const POST = {}|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
     ))
     const featureName = String(title).toLocaleLowerCase().split(' ').join('_')
     const n_features = JSON.parse(JSON.stringify(features))
@@ -57,7 +57,7 @@ export default function m(props: LogFeature_detailProps): any {
       '\n',
       ...uri,
       '\n',
-      `node import.js 'feature:::` + featureName + `~~~module.exports = ` + JSON.stringify(n_features, undefined, 2) + `'`
+      `bun import.js 'feature:::` + featureName + `~~~module.exports = ` + JSON.stringify(n_features, undefined, 2) + `'`
     )
 
     let post = {

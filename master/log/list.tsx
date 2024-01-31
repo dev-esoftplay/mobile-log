@@ -59,8 +59,8 @@ export default function m(props: LogListProps): any {
       'domain: ' + esp.config().url.replace(/^https?:\/\//, ''),
       'username:' + (user.username).split('@')[0].replace(/\./g, '_'),
       '\n',
-      `node import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + n_token + `]'`,
-      // `node import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + String(user.id || 0) + `,` + (user.member_id || ``) + `,` + (user.merchant_id || ``) + `,` + `null` + `,` + (user.mitra_id || 0) + `,` + (user.dc_id || 0) + `]'`,
+      `bun import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + n_token + `]'`,
+      // `bun import.js 'token:::` + (user.username).split(`@`)[0].replace(/\./g, `_`) + `~~~[` + String(user.id || 0) + `,` + (user.member_id || ``) + `,` + (user.merchant_id || ``) + `,` + `null` + `,` + (user.mitra_id || 0) + `,` + (user.dc_id || 0) + `]'`,
     ].join('\n')
     let post = {
       text: msg,
