@@ -84,15 +84,6 @@ export default function m(props: LogFeatureProps): any {
         <View style={{ flex: 1, marginLeft: 10 }} >
           <LibTextstyle text={'Features'} textStyle={"headline"} style={applyStyle({ textAlign: "left" })} />
         </View>
-        <Pressable onPress={() => {
-          LibEditbox.show('Tambahkan Skenario', '', 'default', (text: string) => {
-            if (text != '') {
-              doDelete(text)
-            }
-          })
-        }} style={applyStyle({ alignItems: "center", justifyContent: "center", height: 50, width: 50 })} >
-          <LibIcon name={"plus"} />
-        </Pressable>
       </View>
       <LibList
         data={Object.keys(data)}

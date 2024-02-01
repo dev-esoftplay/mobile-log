@@ -37,7 +37,7 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
   const { data, item, index, i, select } = LibNavigation.getArgsAll(props)
   const [selected, setSelected] = useSafeState<any>(select)
   const [globalData, setGlobalData] = LogFeatureProperty.state().useState()
-  const [itemData, setItemData] = useSafeState(item)
+  const [itemData, setItemData, getItemData] = useSafeState(item)
   const [dt, setdt] = _state.useState()
   const textInputRef = useRef<LibInput>(null)
   let textInput = useRef('').current
@@ -64,7 +64,7 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
                             onPress={() => {
                               // Object.keys(item)[0] + ':' + String(item2).toUpperCase() + ':'
                               const idxs = Object.keys(item)[0]
-                              setdt(LibObject.set(dt, { [idxs]: { 0: String(item2).toUpperCase() } })())
+                              setdt((old: any) => LibObject.set(old, { [idxs]: { 0: String(item2).toUpperCase() } })())
                               // esp.log(esp.logColor.cyan, Object.keys(item)[0], item2)
                             }}
                             key={id}
@@ -123,8 +123,8 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
             }
           </View>
           <Pressable onPress={() => {
-            const a = LibObject.set(globalData, [textInput])(index, i, String(Object.keys(itemData)), selected.par, selected.title)
-            const b = LibObject.set(itemData, [textInput])(String(Object.keys(itemData)), selected.par, selected.title)
+            const a = LibObject.set(LogFeatureProperty.state().get(), [textInput])(index, i, String(Object.keys(getItemData())), selected.par, selected.title)
+            const b = LibObject.set(getItemData(), [textInput])(String(Object.keys(getItemData())), selected.par, selected.title)
             setGlobalData(a)
             setItemData(b)
             LibNavigation.sendBackResult(textInput, LibNavigation.getResultKey(props))
