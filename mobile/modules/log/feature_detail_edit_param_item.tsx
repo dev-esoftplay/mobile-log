@@ -39,7 +39,7 @@ export default function m(props: LogFeature_detail_edit_param_itemProps): any {
             setSelected(!selected);
             props?.onPress?.()
           }} style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontFamily: 'MonoSpace', fontSize: 14, color: '#3f9822' }} >{String(props?.params).toUpperCase()}</Text>
+            <Text style={{ fontFamily: 'mono', fontSize: 14, color: '#3f9822' }} >{String(props?.params).toUpperCase()}</Text>
           </Pressable>
         </View>
       </View>

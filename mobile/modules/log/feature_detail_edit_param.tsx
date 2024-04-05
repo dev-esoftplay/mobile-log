@@ -50,7 +50,7 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
   function renderItems(item: any, i: number) {
     return (
       <View key={i} style={{ backgroundColor: 'white', marginHorizontal: 15, marginBottom: 10, marginTop: 5, padding: 5, borderRadius: 5, ...LibStyle.elevation(3) }}>
-        <Text style={{ fontFamily: 'MonoSpace', fontSize: 16, color: '#f33775', padding: 10 }}>{Object.keys(item)}</Text>
+        <Text style={{ fontFamily: 'mono', fontSize: 16, color: '#f33775', padding: 10 }}>{Object.keys(item)}</Text>
         {
           Object.values(item).length > 0 && Object.values(item)?.map?.((t: any, idx: number) => (
             <View key={idx} style={{ borderTopColor: '#e6e6e6', borderTopWidth: 1, paddingTop: 10 }}>
@@ -101,7 +101,7 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
       </View>
       <View style={{ backgroundColor: 'white', padding: 15 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontSize: 16, fontFamily: 'MonoSpace' }}>{selected?.title}</Text>
+          <Text style={{ fontSize: 16, fontFamily: 'mono' }}>{selected?.title}</Text>
           <View style={{ marginLeft: 10, flex: 1, borderWidth: 1, borderRadius: 4, borderColor: '#c4c4c4', flexDirection: 'row', alignItems: 'center' }}>
             <LibInput
               ref={textInputRef}
@@ -137,14 +137,14 @@ export default function m(props: LogFeature_detail_edit_paramProps): any {
           <View style={{ marginTop: 10, borderWidth: 0.5, padding: 10, borderColor: '#e6e6e6', borderRadius: 5 }}>
             <Text style={{ fontSize: 14 }}>{'Selected Indexs : '}</Text>
             <View style={{ marginTop: 5, flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
-              <Text style={{ fontFamily: 'MonoSpace', fontSize: 16 }}>@{indexs + ":"}</Text>
+              <Text style={{ fontFamily: 'mono', fontSize: 16 }}>@{indexs + ":"}</Text>
               {
                 indexs && dt && Object.values(dt[indexs]).map((t: any, i: number) => {
                   let lastIndex = (Object.values(dt[indexs]).length - 1) == i
                   return (
-                    <Text key={i} style={{ fontFamily: 'MonoSpace', fontSize: 16, color: '#f33775' }}>
+                    <Text key={i} style={{ fontFamily: 'mono', fontSize: 16, color: '#f33775' }}>
                       {i == 0 ? (String(t).toUpperCase() + ":") : t}
-                      <Text style={{ fontFamily: 'MonoSpace', fontSize: 16, color: '#3f9822' }}>{(lastIndex || i == 0) ? '' : '.'}</Text>
+                      <Text style={{ fontFamily: 'mono', fontSize: 16, color: '#3f9822' }}>{(lastIndex || i == 0) ? '' : '.'}</Text>
                     </Text>
                   )
                 })

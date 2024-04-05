@@ -70,7 +70,7 @@ export default function m(props: LogItem_arrayProps): any {
           setSelected(!selected);
           props?.onPress?.()
         }} style={{ padding: 10, marginLeft: 10, flexDirection: 'row', borderWidth: 0.5, borderRadius: 5, marginBottom: 10 }}>
-          <Text style={{ fontFamily: 'MonoSpace', fontSize: 16, color: '#f33775' }} >{props?.index}</Text>
+          <Text style={{ fontFamily: 'mono', fontSize: 16, color: '#f33775' }} >{props?.index}</Text>
         </Pressable>
       </View>
       {
