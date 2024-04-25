@@ -52,7 +52,7 @@ export default function m(props: LogListProps): any {
     // token += "|" + LibUtils?.getInstallationID()
     // token += "|" + dt.mitra_id || 0
     // token += "|" + dt.dc_id || 0
-    const _token = token.split('|').map((element: any) => typeof element === 'string' ? `"${element}"` : Number(element))
+    const _token = token.split('|').map((x: any) => isNaN(x) ? `"${x}"` : Number(x))
     let msg = [
       'slug: ' + '#' + esp?.appjson()?.expo?.slug,
       'domain: ' + esp.config().url.replace(/^https?:\/\//, ''),
