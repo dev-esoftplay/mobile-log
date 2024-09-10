@@ -74,7 +74,7 @@ export default function m(props: LogItem1Props): any {
           setSelected(!selected);
           props?.onPress?.()
         }} style={{ padding: 10, borderWidth: 0.5, borderRadius: 5 }}>
-          <Text style={{ fontFamily: 'MonoSpace', fontSize: 16, color: '#f33775' }} >{item3}</Text>
+          <Text style={{ fontFamily: 'mono', fontSize: 16, color: '#f33775' }} >{item3}</Text>
         </Pressable>
       </View>
       {

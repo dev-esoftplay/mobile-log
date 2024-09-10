@@ -39,15 +39,27 @@ export default function m(props: LogList_detailProps): any {
         `bun import.js 'uri:::` + item.replace(`/`, `.`) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = ` + JSON.stringify(Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get), undefined, 2) + `|||const POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.post, undefined, 2) + `|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
       )
     } else {
+      const get = Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get)
+      const post = Object.values<any>(item2)?.[0]?.post
+
+      let params: any = {}
+      if (Object.keys(get).length > 0) {
+        params["GET"] = get
+      }
+      if (Object.keys(post).length > 0) {
+        params["POST"] = post
+      }
+      const _params = Object.keys(params).length > 0 ? ", " + JSON.stringify(params, undefined, 2) : ""
+
       msg.push(
         'feature: ' + item.replace(`/`, `.`),
         '\n',
-        `bun import.js 'uri:::` + item.replace(`/`, `.`) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = ` + JSON.stringify(Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get), undefined, 2) + `|||const POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.post, undefined, 2) + `|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`,
-        `bun import.js 'feature:::` + item.replace(`/`, `.`) + `~~~module.exports = [["` + item.replace('/', '.') + `"]]'`,
+        // `bun import.js 'uri:::` + item.replace(`/`, `.`) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = ` + JSON.stringify(Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get), undefined, 2) + `|||const POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.post, undefined, 2) + `|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`,
+        `bun import.js 'feature:::` + item.replace(`/`, `.`) + `~~~module.exports = [["` + item.replace('/', '.') + `"` + _params + `]]'`,
+        // `bun import.js 'feature:::` + item.replace(`/`, `.`) + `~~~module.exports = [["` + item.replace('/', '.') + `",{ "GET": ` + get + `, "POST": ` + post + ` }]]'`,
         'bun index.js ' + item.replace(`/`, `.`)
       )
     }
-
 
     let post = {
       text: msg.join('\n'),
@@ -104,11 +116,11 @@ export default function m(props: LogList_detailProps): any {
                     }
                   </View>
                   <View style={{}}>
-                    <Pressable onPress={() => {
+                    {/* <Pressable onPress={() => {
                       sendMsg(true, url, item2)
                     }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
                       <Text>{'> URI'}</Text>
-                    </Pressable>
+                    </Pressable> */}
                     <Pressable onPress={() => {
                       sendMsg(false, url, item2)
                     }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>

@@ -36,7 +36,7 @@ export default function m(props: LogAttack_listProps): any {
         <Pressable
           onPress={() => { LibNavigation.navigate('log/attack_list', { data: Object.values(state[item]) }) }}
           style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ flex: 1, fontSize: 16, fontFamily: 'MonoSpace' }}>{item}</Text>
+          <Text style={{ flex: 1, fontSize: 16, fontFamily: 'mono' }}>{item}</Text>
           <Pressable onPress={() => {
             LibDialog.warningConfirm('Hapus?', "Hapus Log " + item + " ?", 'Hapus', () => {
               setState((old: any) => LibObject.unset(old, item)())

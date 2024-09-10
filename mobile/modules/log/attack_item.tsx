@@ -53,9 +53,9 @@ export default function m(props: LogAttack_itemProps): any {
   function Items(prop: any) {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <Text style={{ fontSize: 12, flex: 2, color: '#f33775', fontFamily: 'MonoSpace' }}>{prop?.index}</Text>
+        <Text style={{ fontSize: 12, flex: 2, color: '#f33775', fontFamily: 'mono' }}>{prop?.index}</Text>
         <Text style={{ fontSize: 12 }}>{'='}</Text>
-        <Text style={{ fontSize: 12, flex: 6, color: '#3f9822', fontFamily: 'MonoSpace' }}> {prop?.value}</Text>
+        <Text style={{ fontSize: 12, flex: 6, color: '#3f9822', fontFamily: 'mono' }}> {prop?.value}</Text>
       </View>
     )
   }
@@ -89,7 +89,7 @@ export default function m(props: LogAttack_itemProps): any {
             {
               Object.keys(get).length > 0 &&
               <>
-                <Text style={{ fontSize: 12, marginBottom: 10, fontFamily: 'MonoSpace' }}>{'GET : '}</Text>
+                <Text style={{ fontSize: 12, marginBottom: 10, fontFamily: 'mono' }}>{'GET : '}</Text>
                 <View style={{ flex: 1 }}>
                   {Object.keys(get).map(renderGet)}
                 </View>
@@ -98,7 +98,7 @@ export default function m(props: LogAttack_itemProps): any {
             {
               Object.keys(post).length > 0 &&
               <>
-                <Text style={{ fontSize: 12, marginTop: 10, fontFamily: 'MonoSpace' }}>{'POST : '}</Text>
+                <Text style={{ fontSize: 12, marginTop: 10, fontFamily: 'mono' }}>{'POST : '}</Text>
                 <View style={{ flex: 1 }}>
                   {Object.keys(post).map(renderPost)}
                 </View>
