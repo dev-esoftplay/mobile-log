@@ -55,7 +55,7 @@ function fixUrl(url: string) {
   return fullUrl
 }
 
-export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean, response: any) {
+export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean, response: any, module?: string) {
   LogReporter?.addLog?.(url + uri, post, response)
   const logEnable = enableLog().get()
   if (!!esp.config('log')?.enable && logEnable) {
@@ -87,6 +87,7 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
     if (_uri != '') {
       const data = {
         [_uri]: {
+          module: module,
           secure: isSecure,
           time: moment().format('YYYY-MM-DD HH:mm:ss'),
           get: get,

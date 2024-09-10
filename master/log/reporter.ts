@@ -31,10 +31,10 @@ export default class m {
     return state
   }
 
-  static addLog(url: string, post: string, _response: string): void {
+  static addLog(url: string, post: string, _response: string, module?: string): void {
     if (isHasAccess.get()) {
       var response = typeof _response == 'string' && ((_response.startsWith("{") && _response.endsWith("}")) || (_response.startsWith("[") && _response.endsWith("]"))) ? JSON.parse(_response) : _response
-      state.set(LibObject.push(state.get(), { url, post, response })())
+      state.set(LibObject.push(state.get(), { url, post, response, module })())
     }
   }
 
