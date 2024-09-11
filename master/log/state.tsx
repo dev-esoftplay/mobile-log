@@ -55,6 +55,16 @@ function fixUrl(url: string) {
   return fullUrl
 }
 
+function formatSizeUnits(bytes: number) {
+  if (bytes >= 1024 * 1024) {
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  } else if (bytes >= 1024) {
+    return (bytes / 1024).toFixed(2) + ' KB';
+  } else {
+    return bytes + ' bytes';
+  }
+}
+
 export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean, response: any, module?: string) {
   LogReporter?.addLog?.(url + uri, post, response)
   const logEnable = enableLog().get()
@@ -85,6 +95,9 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
     const postNew = Object.assign({}, ..._post)
 
     if (_uri != '') {
+      const responseJSON = JSON.stringify(response);
+      const responseSize = new TextEncoder().encode(responseJSON).length;
+
       const data = {
         [_uri]: {
           module: module,
@@ -92,7 +105,8 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
           time: moment().format('YYYY-MM-DD HH:mm:ss'),
           get: get,
           post: postNew,
-          response: response
+          response: response,
+          size: formatSizeUnits(responseSize)
         }
       }
       let dt = LibObject.unshift(allData, data)()

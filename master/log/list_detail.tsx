@@ -77,34 +77,45 @@ export default function m(props: LogList_detailProps): any {
         {
           Object.values(data?.[url])?.map?.((item2: any, i2: number) => {
             return (
-              <View key={i2} style={{ backgroundColor: 'white', borderColor: "#f1f1f1", borderWidth: 1, padding: 5, borderRadius: 5, marginTop: 5, marginHorizontal: 15 }}>
-                <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+              <View key={i2} style={{ backgroundColor: 'white', borderColor: "#ccc", borderWidth: 1, padding: 8, borderRadius: 8, marginVertical: 5, marginHorizontal: 15 }}>
+                <View style={{ flexDirection: 'row', alignItems: "center" }}>
                   <View style={{ flex: 1 }}>
                     {
                       Object.values(item2)?.map((item3: any, i3: number) => (
-                        <View key={i3} style={{ marginTop: 5 }}>
+                        <View key={i3} style={{}}>
                           {
                             Object.keys(item3)?.map?.((item4: any, i4: number) => {
                               if (item4 != "response") {
                                 return (
                                   <View key={i4} style={{ flexDirection: 'row', marginBottom: 5 }}>
-                                    <Text style={{ flex: 1, fontSize: 12 }}>{item4}</Text>
-                                    <Text style={{ fontSize: 12 }}>{"= "}</Text>
-                                    <View style={{ flex: 5 }}>
-                                      {
-                                        (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
-                                          return (
-                                            <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                                              <Text style={{ flex: 2, fontSize: 12 }}>{item5}</Text>
-                                              <Text style={{ fontSize: 12 }}>{" : "}</Text>
-                                              <Text style={{ flex: 3, fontSize: 12 }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
-                                            </View>
-                                          )
-                                        })
-                                          :
-                                          <Text style={{ fontSize: 12 }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
-                                      }
-                                    </View>
+                                    {
+                                      item4 == "size" ?
+                                        <View style={{ marginTop: 5, borderWidth: 0.5, borderColor: "#ccc", borderRadius: 5, padding: 3, paddingHorizontal: 8 }}>
+                                          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>response size
+                                            <Text style={{ fontWeight: "bold" }}> {JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                          </Text>
+                                        </View>
+                                        :
+                                        <>
+                                          <Text allowFontScaling={false} style={{ flex: 1, fontSize: 12, color: "#333" }}>{item4}</Text>
+                                          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{"= "}</Text>
+                                          <View style={{ flex: 5 }}>
+                                            {
+                                              (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
+                                                return (
+                                                  <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
+                                                    <Text allowFontScaling={false} style={{ flex: 2, fontSize: 12, color: "#333" }}>{item5}</Text>
+                                                    <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{" : "}</Text>
+                                                    <Text allowFontScaling={false} style={{ flex: 3, fontSize: 12, color: "#333" }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
+                                                  </View>
+                                                )
+                                              })
+                                                :
+                                                <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                            }
+                                          </View>
+                                        </>
+                                    }
                                   </View>
                                 )
                               } else {
@@ -116,15 +127,10 @@ export default function m(props: LogList_detailProps): any {
                     }
                   </View>
                   <View style={{}}>
-                    {/* <Pressable onPress={() => {
-                      sendMsg(true, url, item2)
-                    }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text>{'> URI'}</Text>
-                    </Pressable> */}
                     <Pressable onPress={() => {
                       sendMsg(false, url, item2)
-                    }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text>{'> FEATURE'}</Text>
+                    }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                      <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> FEATURE'}</Text>
                     </Pressable>
                     <Pressable onPress={() => {
                       if (Object.values(data?.[url]?.[0]?.[url]?.get)?.length > 0 || Object.values(data?.[url]?.[0]?.[url]?.post)?.length > 0) {
@@ -134,13 +140,13 @@ export default function m(props: LogList_detailProps): any {
                           })
                         }, 'Batal', () => { })
                       }
-                    }} style={{ paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text>{'> INTRUDE'}</Text>
+                    }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                      <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> INTRUDE'}</Text>
                     </Pressable>
                     <Pressable onPress={() => {
                       LibNavigation.navigate('log/detail', { data: item2 })
-                    }} style={{ marginTop: 10, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text>{'RESULT'}</Text>
+                    }} style={{ marginTop: 15, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                      <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'RESULT'}</Text>
                     </Pressable>
                   </View>
                 </View>
