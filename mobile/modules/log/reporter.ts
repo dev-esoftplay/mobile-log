@@ -10,8 +10,7 @@ import Storage from 'esoftplay/storage';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
 import { Platform } from 'react-native';
-const { manifest } = Constants;
-
+const { expoConfig } = Constants;
 
 const state = useGlobalState<any[]>([], { persistKey: 'log/reporter', inFile: true, jsonBeautify: true })
 const isHasAccess = useGlobalState(false, { persistKey: 'log/reporter_access' })
@@ -63,7 +62,7 @@ export default class m {
         let config = esp?.config?.()
         let msg = [
           '#report from ' + email,
-          '\nslug: ' + "#" + manifest?.slug,
+          '\nslug: ' + "#" + expoConfig?.slug,
           'dev: ' + Platform.OS + ' - ' + Constants.deviceName,
           'app/pub_id: ' + Constants.appOwnership + '/' + (config?.publish_id || '-'),
         ].join('\n')
