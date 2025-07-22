@@ -6,6 +6,7 @@ import { LibList } from 'esoftplay/cache/lib/list/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { LibStyle } from 'esoftplay/cache/lib/style/import';
+import { LibUtils } from 'esoftplay/cache/lib/utils/import';
 import { LogItem2 } from 'esoftplay/cache/log/item2/import';
 import { LogStateProperty } from 'esoftplay/cache/log/state/import';
 import { LogTokenProperty } from 'esoftplay/cache/log/token/import';
@@ -13,8 +14,9 @@ import { UserClass } from 'esoftplay/cache/user/class/import';
 
 import esp from 'esoftplay/esp';
 import useSafeState from 'esoftplay/state';
+import Constants from 'expo-constants';
 import React from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Platform, Pressable, Text, View } from 'react-native';
 
 
 export interface LogListArgs {
@@ -69,6 +71,24 @@ export default function m(props: LogListProps): any {
     new LibCurl().custom('https://api.telegram.org/bot923808407:AAEFBlllQNKCEn8E66fwEzCj5vs9qGwVGT4/sendMessage', post, () => LibProgress.hide())
   }
 
+  async function sendInstallationId() {
+    const installationId = await LibUtils.getInstallationID()
+    let msg = [
+      'slug: ' + '#' + esp?.appjson()?.expo?.slug,
+      'domain: ' + esp.config().url.replace(/^https?:\/\//, ''),
+      'username: ' + (user.username).split('@')[0].replace(/\./g, '_'),
+      'device: ' + Platform.OS + ' | ' + Constants.deviceName,
+      'installation_id: ' + installationId,
+    ].join('\n')
+    let post = {
+      text: msg,
+      chat_id: '-610603314',
+      disable_web_page_preview: true
+    }
+    LibProgress.show()
+    new LibCurl().custom('https://api.telegram.org/bot923808407:AAEFBlllQNKCEn8E66fwEzCj5vs9qGwVGT4/sendMessage', post, () => LibProgress.hide())
+  }
+
   function removeLogItem(item: any) {
     function remove() {
       const indexOfAll = (arr: any, val: any) => arr.reduce((acc: any, el: any, i: any) => (el === val ? [...acc, i] : acc), []);
@@ -110,6 +130,14 @@ export default function m(props: LogListProps): any {
               LibDialog.confirm("Konfirmasi ?", "Kirim User Token?", "KIRIM", () => sendToken(), "BATAL", () => { })
             }} >
               <LibIcon name="account-outline" size={28} color='#004085' />
+            </Pressable>
+          }
+          {
+            user?.id &&
+            <Pressable style={{ alignItems: 'center', justifyContent: 'center' }} onPress={() => {
+              LibDialog.confirm("Konfirmasi ?", "Kirim Installation ID?", "KIRIM", () => sendInstallationId(), "BATAL", () => { })
+            }} >
+              <LibIcon name="cellphone-information" size={24} color='#004085' />
             </Pressable>
           }
           <Pressable onPress={() => {

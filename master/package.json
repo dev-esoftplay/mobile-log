@@ -1,6 +1,6 @@
 {
   "name": "esoftplay-log",
-  "version": "0.0.3-k",
+  "version": "0.0.3-l",
   "description": "log module on esoftplay framework",
   "main": "index.js",
   "scripts": {
