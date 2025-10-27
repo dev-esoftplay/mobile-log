@@ -2,12 +2,13 @@
 
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibDialog } from 'esoftplay/cache/lib/dialog/import';
+import { LibList } from 'esoftplay/cache/lib/list/import';
 import { LibNavigation } from 'esoftplay/cache/lib/navigation/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
 import { LogHeader } from 'esoftplay/cache/log/header/import';
 import esp from 'esoftplay/esp';
 import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 
 export interface LogList_detailArgs {
@@ -73,88 +74,105 @@ export default function m(props: LogList_detailProps): any {
   return (
     <View style={{ flex: 1 }}>
       <LogHeader title={url} />
-      <ScrollView>
-        {
-          Object.values(data?.[url])?.map?.((item2: any, i2: number) => {
-            return (
-              <View key={i2} style={{ backgroundColor: 'white', borderColor: "#ccc", borderWidth: 1, padding: 8, borderRadius: 8, marginVertical: 5, marginHorizontal: 15 }}>
-                <View style={{ flexDirection: 'row', alignItems: "center" }}>
-                  <View style={{ flex: 1 }}>
-                    {
-                      Object.values(item2)?.map((item3: any, i3: number) => (
-                        <View key={i3} style={{}}>
-                          {
-                            Object.keys(item3)?.map?.((item4: any, i4: number) => {
-                              if (item4 != "response") {
-                                return (
-                                  <View key={i4} style={{ flexDirection: 'row', marginBottom: 5 }}>
-                                    {
-                                      item4 == "size" ?
-                                        <View style={{ marginTop: 5, borderWidth: 0.5, borderColor: "#ccc", borderRadius: 5, padding: 3, paddingHorizontal: 8 }}>
-                                          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>response size
-                                            <Text style={{ fontWeight: "bold" }}> {JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
-                                          </Text>
-                                        </View>
-                                        :
-                                        <>
-                                          <Text allowFontScaling={false} style={{ flex: 1, fontSize: 12, color: "#333" }}>{item4}</Text>
-                                          <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{"= "}</Text>
-                                          <View style={{ flex: 5 }}>
-                                            {
-                                              (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
-                                                return (
-                                                  <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                                                    <Text allowFontScaling={false} style={{ flex: 2, fontSize: 12, color: "#333" }}>{item5}</Text>
-                                                    <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{" : "}</Text>
-                                                    <Text allowFontScaling={false} style={{ flex: 3, fontSize: 12, color: "#333" }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
-                                                  </View>
-                                                )
-                                              })
-                                                :
-                                                <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
-                                            }
-                                          </View>
-                                        </>
-                                    }
-                                  </View>
-                                )
-                              } else {
-                                return null
-                              }
-                            })}
-                        </View>
-                      ))
-                    }
-                  </View>
-                  <View style={{}}>
-                    <Pressable onPress={() => {
-                      sendMsg(false, url, item2)
-                    }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> FEATURE'}</Text>
-                    </Pressable>
-                    <Pressable onPress={() => {
-                      if (Object.values(data?.[url]?.[0]?.[url]?.get)?.length > 0 || Object.values(data?.[url]?.[0]?.[url]?.post)?.length > 0) {
-                        LibDialog.warningConfirm('SQL INJECTION', 'Proses inject berlangsung selama kurang lebih 5 menit tergantung dari koneksi. Lanjutkan?', 'Lanjutkan', () => {
-                          LibNavigation.navigate('log/progress', {
-                            route: [Object.values<any>(data)?.[index]?.[i2]]
-                          })
-                        }, 'Batal', () => { })
-                      }
-                    }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> INTRUDE'}</Text>
-                    </Pressable>
-                    <Pressable onPress={() => {
-                      LibNavigation.navigate('log/detail', { data: item2 })
-                    }} style={{ marginTop: 15, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
-                      <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'RESULT'}</Text>
-                    </Pressable>
-                  </View>
-                </View>
+      <LibList
+        data={Object.values(data?.[url])}
+        renderItem={(item2: any, i2: number) => (
+          <View key={i2} style={{ backgroundColor: 'white', borderColor: "#ccc", borderWidth: 1, padding: 8, borderRadius: 8, marginVertical: 5, marginHorizontal: 15 }}>
+            <View style={{ flexDirection: 'row', alignItems: "center" }}>
+              <View style={{ flex: 1 }}>
+                {
+                  Object.values(item2)?.map((item3: any, i3: number) => (
+                    <View key={i3} style={{}}>
+                      {
+                        Object.keys(item3)?.map?.((item4: any, i4: number) => {
+                          if (item4 != "response") {
+                            return (
+                              <View key={i4} style={{ flexDirection: 'row', marginBottom: 5 }}>
+                                {
+                                  item4 == "size" ?
+                                    <View style={{ marginTop: 5, borderWidth: 0.5, borderColor: "#ccc", borderRadius: 5, padding: 3, paddingHorizontal: 8 }}>
+                                      <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>response size
+                                        <Text style={{ fontWeight: "bold" }}> {JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                      </Text>
+                                    </View>
+                                    :
+                                    <>
+                                      <Text allowFontScaling={false} style={{ flex: 1, fontSize: 12, color: "#333" }}>{item4}</Text>
+                                      <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{"= "}</Text>
+                                      <View style={{ flex: 5 }}>
+                                        {
+                                          (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
+                                            return (
+                                              <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
+                                                <Text allowFontScaling={false} style={{ flex: 2, fontSize: 12, color: "#333" }}>{item5}</Text>
+                                                <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{" : "}</Text>
+                                                <Text allowFontScaling={false} style={{ flex: 3, fontSize: 12, color: "#333" }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
+                                              </View>
+                                            )
+                                          })
+                                            :
+                                            <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                        }
+                                      </View>
+                                    </>
+                                }
+                              </View>
+                            )
+                          } else {
+                            return null
+                          }
+                        })}
+                    </View>
+                  ))
+                }
               </View>
-            )
-          })
-        }
-      </ScrollView>
+              <View style={{}}>
+                <Pressable onPress={() => {
+                  const domain = esp.config()?.url.replace(/^https?:\/\//, '').replace(/\/+$/, '')
+                  const dataGET = Object.values<any>(data?.[url]?.[i2] ?? {})?.[0]?.get ?? {}
+                  const keyGET = Object.keys(dataGET)
+                  const valueGET = keyGET.map((key) => dataGET[key]?.[0] ?? '')
+                  const queryParams = keyGET.length
+                    ? '?' + keyGET
+                      .map((k, i) => `${encodeURIComponent(k)}=${encodeURIComponent(valueGET[i])}`)
+                      .join('&')
+                    : '';
+                  const fullUri = `${domain}${url}${queryParams}`;
+
+                  esp.mod("lib/utils").copyToClipboard(fullUri).then(() => {
+                    esp.modProp("lib/toast").show('Copied to clipboard')
+                  })
+
+                }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                  <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> COPY URL'}</Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                  sendMsg(false, url, item2)
+                }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                  <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> FEATURE'}</Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                  if (Object.values(data?.[url]?.[0]?.[url]?.get)?.length > 0 || Object.values(data?.[url]?.[0]?.[url]?.post)?.length > 0) {
+                    LibDialog.warningConfirm('SQL INJECTION', 'Proses inject berlangsung selama kurang lebih 5 menit tergantung dari koneksi. Lanjutkan?', 'Lanjutkan', () => {
+                      LibNavigation.navigate('log/progress', {
+                        route: [Object.values<any>(data)?.[index]?.[i2]]
+                      })
+                    }, 'Batal', () => { })
+                  }
+                }} style={{ marginTop: 5, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                  <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'> INTRUDE'}</Text>
+                </Pressable>
+                <Pressable onPress={() => {
+                  LibNavigation.navigate('log/detail', { data: item2 })
+                }} style={{ marginTop: 15, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderRadius: 3, borderColor: '#e6e6e6', alignItems: 'center' }}>
+                  <Text allowFontScaling={false} style={{ fontSize: 14 }}>{'RESULT'}</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+
+        )}
+      />
     </View>
   )
 }
