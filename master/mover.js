@@ -10,6 +10,7 @@ if (fs.existsSync(espPath + '/modules/log')) {
           var resJson = typeof resText == 'string' && ((resText.startsWith("{") && resText.endsWith("}")) || (resText.startsWith("[") && resText.endsWith("]"))) ? JSON.parse(resText) : resText
           esp.modProp("log/state").doLogCurl(this.uri, this.url, post, this.isSecure, resJson, esp.mod("user/routes").getCurrentRouteName())
         }`)
+		curl = curl.replaceAll(`//api_init_time`, `esp.modProp("log/state")?.stateResponseTime?.set?.({ start: Date.now(), end: 0 })`)
 		fs.writeFileSync(espPath + "modules/lib/curl.ts", curl)
 		console.log("LibCUrl Fix !")
 	}

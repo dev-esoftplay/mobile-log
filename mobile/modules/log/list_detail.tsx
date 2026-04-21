@@ -40,8 +40,8 @@ export default function m(props: LogList_detailProps): any {
         `bun import.js 'uri:::` + item.replace(`/`, `.`) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = ` + JSON.stringify(Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get), undefined, 2) + `|||const POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.post, undefined, 2) + `|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
       )
     } else {
-      const get = Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get)
-      const post = Object.values<any>(item2)?.[0]?.post
+      const get = Object.assign(getIDrepaired, Object.values<any>(item2)?.get)
+      const post = Object.values<any>(item2)?.post
 
       let params: any = {}
       if (Object.keys(get).length > 0) {
@@ -96,25 +96,32 @@ export default function m(props: LogList_detailProps): any {
                                       </Text>
                                     </View>
                                     :
-                                    <>
-                                      <Text allowFontScaling={false} style={{ flex: 1, fontSize: 12, color: "#333" }}>{item4}</Text>
-                                      <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{"= "}</Text>
-                                      <View style={{ flex: 5 }}>
-                                        {
-                                          (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
-                                            return (
-                                              <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
-                                                <Text allowFontScaling={false} style={{ flex: 2, fontSize: 12, color: "#333" }}>{item5}</Text>
-                                                <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{" : "}</Text>
-                                                <Text allowFontScaling={false} style={{ flex: 3, fontSize: 12, color: "#333" }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
-                                              </View>
-                                            )
-                                          })
-                                            :
-                                            <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
-                                        }
+                                    item4 == "response_time" ?
+                                      <View style={{ marginTop: 5, borderWidth: 0.5, borderColor: "#ccc", borderRadius: 5, padding: 3, paddingHorizontal: 8 }}>
+                                        <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>response time
+                                          <Text style={{ fontWeight: "bold" }}> {JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                        </Text>
                                       </View>
-                                    </>
+                                      :
+                                      <>
+                                        <Text allowFontScaling={false} style={{ flex: 1, fontSize: 12, color: "#333" }}>{item4}</Text>
+                                        <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{"= "}</Text>
+                                        <View style={{ flex: 5 }}>
+                                          {
+                                            (typeof item3[item4] == 'object' && Object.keys(item3?.[item4])?.length > 0) ? Object.keys(item3?.[item4])?.map?.((item5: any, i5: number) => {
+                                              return (
+                                                <View key={i5} style={{ flexDirection: 'row', marginBottom: 3 }}>
+                                                  <Text allowFontScaling={false} style={{ flex: 2, fontSize: 12, color: "#333" }}>{item5}</Text>
+                                                  <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{" : "}</Text>
+                                                  <Text allowFontScaling={false} style={{ flex: 3, fontSize: 12, color: "#333" }}>{Object.values<any>(item3?.[item4])?.[i5]}</Text>
+                                                </View>
+                                              )
+                                            })
+                                              :
+                                              <Text allowFontScaling={false} style={{ fontSize: 12, color: "#333" }}>{JSON.stringify(Object.values<any>(item3)?.[i4])}</Text>
+                                          }
+                                        </View>
+                                      </>
                                 }
                               </View>
                             )

@@ -29,30 +29,32 @@ export function enableLog(): useGlobalReturn<any> {
   return stateIsDebug
 }
 
-function doRepairUrl(url: string) {
-  let repaired = url.split('/')
-  if (repaired.length > 1) {
-    const lastIdx = repaired.length - 1
-    const uriParam = repaired[lastIdx].split("?")[0]
-    const fixGET = repaired[lastIdx].split('?').join('&')
+export const stateResponseTime = useGlobalState<{ start: number; end: number }>({ start: 0, end: 0 }, { loadOnInit: true })
 
-    if (!isNaN(Number(uriParam))) {
-      url = repaired.slice(0, lastIdx).join('/')
-      url += "?id=" + [fixGET];
-    }
-  }
+function doRepairUrl(url: string) {
+  // let repaired = url.split('/')
+  // if (repaired.length > 1) {
+  //   const lastIdx = repaired.length - 1
+  //   const uriParam = repaired[lastIdx].split("?")[0]
+  //   const fixGET = repaired[lastIdx].split('?').join('&')
+
+  //   if (!isNaN(Number(uriParam))) {
+  //     url = repaired.slice(0, lastIdx).join('/')
+  //     url += "?id=" + [fixGET];
+  //   }
+  // }
   return url
 }
 
 function fixUrl(url: string) {
-  let fullUrl = url
-  const nurl = url.replace(/(https?:\/\/)/g, '')
-  const spath = nurl.split('/').slice(1, nurl.length - 1).join('/')
-  let host = nurl.split('/')[0] + '/'
-  let path = doRepairUrl(spath)
-  fullUrl = host + path
+  // let fullUrl = url
+  // const nurl = url.replace(/(https?:\/\/)/g, '')
+  // const spath = nurl.split('/').slice(1, nurl.length - 1).join('/')
+  // let host = nurl.split('/')[0] + '/'
+  // let path = doRepairUrl(spath)
+  // fullUrl = host + path
 
-  return fullUrl
+  return url
 }
 
 function formatSizeUnits(bytes: number) {
@@ -65,13 +67,39 @@ function formatSizeUnits(bytes: number) {
   }
 }
 
+function formatDuration(diffMs: number) {
+  if (diffMs < 1000) {
+    return `${diffMs} ms`
+  }
+  const totalSeconds = Math.floor(diffMs / 1000)
+  const minutes = Math.floor(totalSeconds / 60)
+  const seconds = totalSeconds % 60
+
+  let result = ""
+  if (minutes > 0) {
+    result += `${minutes}m `
+  }
+  if (seconds > 0 || minutes === 0) {
+    result += `${seconds}s`
+  }
+  return result.trim()
+}
+
+//tambah ini di lib/curl
+//api_init_time
+//esp.modProp("log/state").stateResponseTime.set({ start: Date.now(), end: 0 })
+
 export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean, response: any, module?: string) {
   LogReporter?.addLog?.(url + uri, post, response)
   const logEnable = enableLog().get()
   if (!!esp.config('log')?.enable && logEnable) {
+    if (stateResponseTime.get().start != 0) {
+      stateResponseTime.set({ start: stateResponseTime.get().start, end: Date.now() })
+    }
     const allData = state().get() || []
 
-    const fullURL = url + uri
+    let fullURL = (url + uri)
+    fullURL = fullURL.replace(esp.config().url, '')
     let uriOrigin = ''
 
     if (fullURL != '') {
@@ -86,27 +114,31 @@ export function doLogCurl(uri: string, url: string, post: any, isSecure: boolean
     const complete_uri = uriOrigin
     const _uri = complete_uri.includes('?') ? complete_uri.split('?')[0] : complete_uri
     const _get = complete_uri.includes('?') ? complete_uri.split('?')[1].split('&').map((x: any) => x.split('=')).map((t: any) => {
-      return ({ [t[0]]: [t[1]] })
+      return ({ [t[0]]: t[1] })
     }) : []
+
     const get = Object.assign({}, ..._get)
     const _post = post && Object.keys(post).map((key) => {
-      return ({ [key]: [decodeURIComponent(post[key])] })
+      return ({ [key]: decodeURIComponent(post[key]) })
     }) || []
     const postNew = Object.assign({}, ..._post)
 
-    if (_uri != '') {
+    fullURL = fullURL.split('?')?.[0]
+    if (fullURL != '') {
       const responseJSON = JSON.stringify(response);
       const responseSize = new TextEncoder().encode(responseJSON).length;
+      const diff = stateResponseTime.get().end - stateResponseTime.get().start
 
       const data = {
-        [_uri]: {
+        [fullURL]: {
           module: module,
           secure: isSecure,
           time: moment().format('YYYY-MM-DD HH:mm:ss'),
           get: get,
           post: postNew,
           response: response,
-          size: formatSizeUnits(responseSize)
+          size: formatSizeUnits(responseSize),
+          response_time: formatDuration(diff)
         }
       }
       let dt = LibObject.unshift(allData, data)()
