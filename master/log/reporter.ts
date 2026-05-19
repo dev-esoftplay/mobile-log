@@ -1,5 +1,3 @@
-//[moved] test
-
 import { LibCurl } from 'esoftplay/cache/lib/curl/import';
 import { LibObject } from 'esoftplay/cache/lib/object/import';
 import { LibProgress } from 'esoftplay/cache/lib/progress/import';
@@ -9,7 +7,6 @@ import moment from 'esoftplay/moment';
 import Storage from 'esoftplay/storage';
 import { createDebounce } from 'esoftplay/timeout';
 import Constants from 'expo-constants';
-import * as FileSystem from 'expo-file-system';
 import { Platform } from 'react-native';
 const { expoConfig } = Constants;
 
@@ -23,7 +20,6 @@ export default class m {
   static getAccess(): void {
     new LibCurl('user_reporter', null, (res, msg) => {
       if (res?.module && res?.delay && res?.module != "" && res?.delay != 0) {
-        console.log("config set")
         reporterConfig.set({ module: res?.module, delay: res?.delay })
       }
       isHasAccess.set(Number(res?.send) == 0 ? false : true)
@@ -81,43 +77,31 @@ export default class m {
   static sendReport(thisDevices?: any, cb?: () => void): void {
     setTimeout(async () => {
       const email = UserClass.state().get().email
-      const fileUri = Storage.getDBPath('log/reporter')
+      const key = 'log/reporter'
 
+      let notes = [
+        '#report from ' + email,
+        '\nslug: ' + "#" + expoConfig?.slug,
+        // 'dev: ' + Platform.OS + ' - ' + Constants.deviceName,
+        'device name : ' + (thisDevices?.device_name || Constants?.deviceName),
+        'device os - os version : ' + (thisDevices?.device_os || Platform.OS) + " - " + (thisDevices?.os_version || Constants.systemVersion),
+        'app/sdk version: ' + (thisDevices?.version || Platform.OS == 'android' ? expoConfig?.android?.versionCode : expoConfig?.ios?.buildNumber) + " - " + Constants.expoConfig?.sdkVersion
+      ].join('\n')
+
+      let msg: string[] = []
+      msg.push(
+        JSON.stringify(state.get(), undefined, 2)
+      )
       m.config().get().module == "" && LibProgress.show('Mengirim report..')
 
       try {
-        const fileInfo = await FileSystem.getInfoAsync(fileUri, {});
-        const fileName = fileInfo?.uri?.split('/').pop();
-        const formData = new FormData();
-        let msg = [
-          '#report from ' + email,
-          '\nslug: ' + "#" + expoConfig?.slug,
-          // 'dev: ' + Platform.OS + ' - ' + Constants.deviceName,
-          'device name : ' + (thisDevices?.device_name || Constants?.deviceName),
-          'device os - os version : ' + (thisDevices?.device_os || Platform.OS) + " - " + (thisDevices?.os_version || Constants.systemVersion),
-          'app version: ' + (thisDevices?.version || Platform.OS == 'android' ? expoConfig?.android?.versionCode : expoConfig?.ios?.buildNumber)
-        ].join('\n')
-        formData.append('caption', msg);
-        formData.append('chat_id', '-1001737180019');
-        formData.append('document', {
-          uri: fileUri,
-          name: email + '-' + fileName,
-          type: 'text/csv',
-        });
-        const response = await fetch(
-          `https://api.telegram.org/bot923808407:AAEFBlllQNKCEn8E66fwEzCj5vs9qGwVGT4/sendDocument`,
-          {
-            method: 'POST',
-            body: formData,
-          }
-        );
-        const result = await response.json();
+        await Storage.setItem(key, msg.join('\n'))
+        await Storage.sendTelegram(key, notes, undefined, undefined, undefined, (o) => `${email}-${o}`)
         m.reset()
         m.deleteReporterEmail()
         cb?.()
         LibProgress.hide()
       } catch (error) {
-        console.log(error)
         LibProgress.hide()
       }
     }, 0);
