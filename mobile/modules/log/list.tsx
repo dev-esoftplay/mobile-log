@@ -166,7 +166,6 @@ export default function m(props: LogListProps): any {
         </View>
       </View>
       <LibList
-        style={{ flex: 1 }}
         extraData={urlList}
         staticHeight={50}
         onRefresh={() => {
