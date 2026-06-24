@@ -15,7 +15,7 @@ import { LibToastProperty } from 'esoftplay/cache/lib/toast/import';
 import { LibUtils } from 'esoftplay/cache/lib/utils/import';
 import useSafeState from 'esoftplay/state';
 import React from 'react';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 
 
 export interface LogDetailArgs {
@@ -26,16 +26,16 @@ export interface LogDetailProps {
 }
 
 type JsonRow = {
-  id: string;
-  lookupPath: string;
-  key: string;
-  value: any;
-  isObject: boolean;
-  brackets: string;
-  depth: number;
-  isOpen: boolean;
-  type: 'node' | 'closing';
-  bracket?: string;
+  id: string
+  lookupPath: string
+  key: string
+  value: any
+  isObject: boolean
+  brackets: string
+  depth: number
+  isOpen: boolean
+  type: 'node' | 'closing'
+  bracket?: string
 };
 
 const getNestedValue = (obj: any, lookupPath: string) => {
@@ -54,13 +54,14 @@ const flattenJson = (data: any, path = '', idPath = '', depth = 0) => {
     const isArray = Array.isArray(value);
     const size = value ? Object.keys(value).length : 0;
     const isObject = typeof value === 'object' && value !== null && size > 0;
+
     const lookupPath = path ? `${path}|${key}` : key;
     const id = idPath ? `${idPath}|${key}|${index}` : `${key}|${index}`;
 
     let brackets = "";
     if (typeof value === 'object' && value !== null) {
-      if (isArray) brackets = size > 0 ? "[..]" : "[ ]";
-      else brackets = size > 0 ? "{..}" : "{ }";
+      if (isArray) brackets = size > 0 ? "[...]" : "[]";
+      else brackets = size > 0 ? "{...}" : "{}";
     }
 
     return {
@@ -77,17 +78,21 @@ const flattenJson = (data: any, path = '', idPath = '', depth = 0) => {
   });
 };
 
-const getInitialData = (data: any) => {
-  const rootRows = flattenJson(data);
+const getFullyExpandedData = (data: any, path = '', idPath = '', depth = 0): JsonRow[] => {
+  if (data === null || typeof data !== 'object') return [];
+
   const initialData: JsonRow[] = [];
+  const nodes = flattenJson(data, path, idPath, depth);
 
-  rootRows.forEach((item) => {
-    const isOpening = item.isObject;
-    initialData.push({ ...item, isOpen: isOpening });
+  nodes.forEach((item, index) => {
+    if (item.isObject) {
+      // Mark it open immediately
+      const openedItem = { ...item, isOpen: true };
+      initialData.push(openedItem);
 
-    if (isOpening) {
-      const nestedValue = getNestedValue(data, item.lookupPath);
-      const children = flattenJson(nestedValue, item.lookupPath, item.id, item.depth + 1);
+      // Fetch nested value and recursively parse children
+      const nestedValue = getNestedValue(data, item.key);
+      const children = getFullyExpandedData(nestedValue, item.lookupPath, item.id, depth + 1);
 
       const isArray = item.brackets.includes('[');
       const closingNode: JsonRow = {
@@ -104,29 +109,32 @@ const getInitialData = (data: any) => {
       };
 
       initialData.push(...children, closingNode);
+    } else {
+      // Regular leaf nodes or empty objects/arrays
+      initialData.push(item);
     }
   });
   return initialData;
 };
 
 export default function m(props: LogDetailProps): any {
+  const { width } = useWindowDimensions()
   const data = LibNavigation.getArgs(props, 'data')
-  const [displayData, setDisplayData] = useSafeState<JsonRow[]>(getInitialData(data));
+  const [displayData, setDisplayData] = useSafeState<JsonRow[]>(getFullyExpandedData(data))
+  const btnWidth = (width - 40) * 0.5
 
   const toggleNode = useCallback((item: JsonRow, index: number) => {
-    if (!item.isObject || item.type === 'closing') return;
+    if (!item.isObject || item.type === 'closing') return
 
-    const isOpening = !item.isOpen;
-    const newDisplayData = [...displayData];
-    newDisplayData[index] = { ...item, isOpen: isOpening };
+    const isOpening = !item.isOpen
+    const newDisplayData = [...displayData]
+    newDisplayData[index] = { ...item, isOpen: isOpening }
 
     if (isOpening) {
-      const nestedValue = getNestedValue(data, item.lookupPath);
-      if (nestedValue === undefined) return;
-
-      const children = flattenJson(nestedValue, item.lookupPath, item.id, item.depth + 1);
-
-      const isArray = item.brackets.includes('[');
+      const nestedValue = getNestedValue(data, item.lookupPath)
+      if (nestedValue === undefined) return
+      const children = flattenJson(nestedValue, item.lookupPath, item.id, item.depth + 1)
+      const isArray = item.brackets.includes('[')
       const closingNode: JsonRow = {
         id: `${item.id}|close`,
         lookupPath: `${item.lookupPath}|close`,
@@ -137,60 +145,51 @@ export default function m(props: LogDetailProps): any {
         depth: item.depth,
         isOpen: false,
         type: 'closing',
-        bracket: isArray ? ']' : '}',
-      };
-
-      newDisplayData.splice(index + 1, 0, ...children, closingNode);
+        bracket: isArray ? ']' : '}'
+      }
+      newDisplayData.splice(index + 1, 0, ...children, closingNode)
     } else {
-      const prefix = `${item.id}|`;
-      const nextData = newDisplayData.filter(node => !node.id.startsWith(prefix));
-      setDisplayData(nextData);
-      return;
+      const prefix = `${item.id}|`
+      const nextData = newDisplayData.filter(node => !node.id.startsWith(prefix))
+      setDisplayData(nextData)
+      return
     }
-
-    setDisplayData(newDisplayData);
-  }, [displayData, data]);
+    setDisplayData(newDisplayData)
+  }, [displayData, data])
 
   const renderItem = ({ item, index }: { item: JsonRow, index: number }) => {
     if (item.type === 'closing') {
       return (
         <View style={[{
-          height: 28,
+          height: 32,
           justifyContent: 'center',
+          paddingRight: 40,
         }, { paddingLeft: (item.depth * 18) + 12 }]}>
-          <Text style={{
-            color: '#ffd700',
-            fontWeight: 'bold'
-          }}>{item.bracket}</Text>
+          <Text style={{ color: '#ffd700', fontWeight: 'bold' }}>{item.bracket}</Text>
         </View>
       );
     }
 
     return (
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={0.7}
         disabled={!item.isObject}
         onPress={() => toggleNode(item, index)}
-        style={[{ paddingBottom: 5, alignItems: 'center', flexDirection: "row", paddingRight: 20, paddingLeft: (item.depth * 18) + 12 }]} >
-        <Text selectable style={{ flexDirection: "row", fontFamily: 'monospace', fontSize: 14, color: '#ccc' }} >
-          {/* <Text style={{ fontSize: 10, color: '#666' }}> {item.isObject ? (item.isOpen ? '▼ ' : '▶ ') : '     '} </Text> */}
-          <Text selectable style={{ color: '#9cdcfe', fontWeight: '500' }}>{item.key} : </Text>
+        style={[{ height: 32, justifyContent: 'center', paddingRight: 40, }, { paddingLeft: (item.depth * 18) + 12 }]} >
+        <Text style={{ fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace', fontSize: 13, color: '#ccc', }}>
+          <Text style={{ fontSize: 10, color: '#666' }}>{item.isObject ? (item.isOpen ? '▼ ' : '▶ ') : '  '}</Text>
+          <Text style={{ color: '#9cdcfe' }}>{item.key}: </Text>
           {item.brackets ? (
             <Text style={{ color: '#ffd700', fontWeight: 'bold' }}>
-              {item.isOpen
-                ? (item.brackets.includes('[') ? '[' : '{')
-                : item.brackets
-              }
+              {item.isOpen ? (item.brackets.includes('[') ? '[' : '{') : item.brackets}
             </Text>
           ) : (
-            <Text selectable style={{ color: '#ce9178' }}>
-              {JSON.stringify(item.value)}
-            </Text>
+            <Text style={{ color: '#ce9178' }}>{JSON.stringify(item.value)}</Text>
           )}
         </Text>
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
 
   const sendToTelegram = () => {
@@ -220,9 +219,10 @@ export default function m(props: LogDetailProps): any {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#2c3e50' }}>
+    <View style={{ flex: 1, backgroundColor: '#1e1e1e' }}>
       <LibStatusbar style='dark' />
-      <View style={applyStyle({ backgroundColor: 'white', paddingTop: LibStyle.STATUSBAR_HEIGHT, borderBottomWidth: 0.5, borderBottomColor: "#ddd", flexDirection: "row", alignItems: "center", marginBottom: 10 })} >
+
+      <View style={applyStyle({ backgroundColor: '#fff', paddingTop: LibStyle.STATUSBAR_HEIGHT, borderBottomWidth: 0.5, borderBottomColor: "#333", flexDirection: "row", alignItems: "center" })} >
         <Pressable onPress={() => LibNavigation.back()} style={applyStyle({ alignItems: "center", justifyContent: "center", height: 50, width: 50 })} >
           <LibIcon name={"arrow-left"} />
         </Pressable>
@@ -230,6 +230,7 @@ export default function m(props: LogDetailProps): any {
           <LibTextstyle text={'Result'} textStyle={"headline"} style={applyStyle({ textAlign: "left" })} />
         </View>
       </View>
+
       <View style={{ flex: 1 }}>
         <ScrollView horizontal contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ minWidth: '100%' }}>
@@ -239,7 +240,6 @@ export default function m(props: LogDetailProps): any {
               estimatedItemSize={32}
               keyExtractor={(item) => item.id}
               extraData={displayData}
-              contentContainerStyle={{ paddingBottom: 20 }}
             />
           </View>
         </ScrollView>
@@ -248,13 +248,13 @@ export default function m(props: LogDetailProps): any {
             LibUtils.copyToClipboard(JSON.stringify(data, undefined, 2)).then(() => {
               LibToastProperty.show("Copied to clipboard")
             })
-          }} style={{ width: (LibStyle.width - 40) * 0.5, margin: 15, marginRight: 5, height: 40, backgroundColor: LibStyle.colorPrimary, borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 5 }} >
+          }} style={{ width: btnWidth, margin: 15, marginRight: 5, height: 40, backgroundColor: LibStyle.colorPrimary, borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 5 }} >
             <LibIcon name='clipboard-outline' size={20} color="white" />
             <Text allowFontScaling={false} style={{ fontSize: 14, textAlign: "center", textAlignVertical: 'center', color: 'white', marginLeft: 5 }} >{'copy to clipboard'}</Text>
           </Pressable>
           <Pressable onPress={() => {
             sendToTelegram()
-          }} style={{ width: (LibStyle.width - 40) * 0.5, margin: 15, marginLeft: 5, height: 40, backgroundColor: LibStyle.colorPrimary, borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 5 }} >
+          }} style={{ width: btnWidth, margin: 15, marginLeft: 5, height: 40, backgroundColor: LibStyle.colorPrimary, borderWidth: 1, borderColor: '#ccc', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 5 }} >
             <LibIcon name='send' size={20} color="white" />
             <Text allowFontScaling={false} style={{ fontSize: 14, textAlign: "center", textAlignVertical: 'center', color: 'white', marginLeft: 5 }} >{'send to esp dev-error'}</Text>
           </Pressable>
