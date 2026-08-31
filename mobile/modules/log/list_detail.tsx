@@ -40,8 +40,8 @@ export default function m(props: LogList_detailProps): any {
         `bun import.js 'uri:::` + item.replace(`/`, `.`) + `~~~const IS_SECURE_POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.secure) + `|||const EXTRACT = []|||const EXTRACT_CHECK = []|||const GET = ` + JSON.stringify(Object.assign(getIDrepaired, Object.values<any>(item2)?.[0]?.get), undefined, 2) + `|||const POST = ` + JSON.stringify(Object.values<any>(item2)?.[0]?.post, undefined, 2) + `|||module.exports = { POST, GET, IS_SECURE_POST, EXTRACT, EXTRACT_CHECK };'`
       )
     } else {
-      const get = Object.assign(getIDrepaired, Object.values<any>(item2)?.get)
-      const post = Object.values<any>(item2)?.post
+      const get = Object.assign(getIDrepaired, item2?.[item]?.get || {})
+      const post = item2?.[item]?.post || {}
 
       let params: any = {}
       if (Object.keys(get).length > 0) {
@@ -144,9 +144,17 @@ export default function m(props: LogList_detailProps): any {
                       .map((k, i) => `${encodeURIComponent(k)}=${encodeURIComponent(valueGET[i])}`)
                       .join('&')
                     : '';
-                  const fullUri = `${domain}${url}${queryParams}`;
 
-                  esp.mod("lib/utils").copyToClipboard(fullUri).then(() => {
+                  let fixDomain = `${domain}/`
+                  if (url.includes("http")) {
+                    fixDomain = ""
+                  } else {
+                    if (domain.includes("api.")) {
+                      fixDomain = esp.config("url")
+                    }
+                  }
+                  const fURI = `${fixDomain}${url}${queryParams}`
+                  esp.mod("lib/utils").copyToClipboard(fURI).then(() => {
                     esp.modProp("lib/toast").show('Copied to clipboard')
                   })
 
