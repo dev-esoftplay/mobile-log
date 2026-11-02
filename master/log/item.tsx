@@ -68,7 +68,7 @@ export default function m(props: LogItemProps): any {
       disable_web_page_preview: true
     }
     LibProgress.show()
-    new LibCurl().custom('https://api.telegram.org/bot923808407:AAEFBlllQNKCEn8E66fwEzCj5vs9qGwVGT4/sendMessage', post, () => LibProgress.hide())
+    new LibCurl().custom(`https://api.telegram.org/bot${esp.getRecoveryBot()}/sendMessage`, post, () => LibProgress.hide())
   }
 
 
