@@ -1,11 +1,9 @@
 {
   "name": "esoftplay-log",
-  "version": "0.0.3-w",
+  "version": "0.0.3-x",
   "description": "log module on esoftplay framework",
   "main": "index.js",
-  "scripts": {
-    "postinstall": "bun ../esoftplay/bin/mover.js esoftplay-log"
-  },
+  "scripts": {},
   "keywords": [
     "espftplay-log",
     "esoftplay"
